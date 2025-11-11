@@ -1,6 +1,6 @@
-import { Footer, Header } from "@/components";
-import stylesContainer from "@/scss/container.module.scss";
+import { Header } from "@/components";
 import "@/scss/app.css";
+import stylesContainer from "@/scss/container.module.scss";
 import { genralSans, kontrap } from "@/utils";
 import clsx from "clsx";
 import type { Metadata } from "next";
@@ -22,10 +22,9 @@ const RootLayout: React.FC<React.PropsWithChildren<Props>> = async ({ children, 
     <NextIntlClientProvider locale={locale} messages={messages}>
       <html lang={locale} className={`${genralSans.variable} ${kontrap.variable}`}>
         <body>
-          <div className={clsx([stylesContainer.container, "m-auto"])}>
+          <div className={clsx([stylesContainer.container, "ml-auto", "mr-auto"])}>
             <Header />
             <main>{children}</main>
-            <Footer />
           </div>
         </body>
       </html>

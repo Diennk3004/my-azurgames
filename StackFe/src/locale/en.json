@@ -4,6 +4,7 @@
     "promotions": "Promotions",
     "menu": "Menu",
     "Order tracking": "Order tracking",
-    "Our locations": "Our locations"
+    "Our locations": "Our locations",
+    "empty_cart_place_order": "Empty Cart. Please place your order"
   }
 }

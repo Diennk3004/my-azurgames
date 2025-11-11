@@ -4,6 +4,7 @@
     "promotions": "Khuyến mãi",
     "menu": "Thực đơn",
     "Order tracking": "Theo dõi đơn hàng",
-    "Our locations": "Danh sách cửa hàng"
+    "Our locations": "Danh sách cửa hàng",
+    "empty_cart_place_order": "Empty Cart. Please place your order"
   }
 }

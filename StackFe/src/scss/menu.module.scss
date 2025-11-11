@@ -5,7 +5,6 @@
   }
   .colLeft {
     width: 85%;
-    background: rgb(242, 244, 248);
     @media screen and (max-width: 992px) {
       width: 100%;
     }
@@ -14,21 +13,33 @@
       .addressContainer {
         width: 111.875rem;
         color: #717273;
+        @media screen and (max-width: 992px) {
+          width: 100%;
+          padding: 0 1rem;
+        }
       }
     }
     .menuFoodBar {
       box-shadow: 0px 1px 0px 0px #dcdcdc;
       .menuContainer {
         width: 108.125rem;
+        @media screen and (max-width: 992px) {
+          width: 100%;
+          padding: 0 1rem;
+        }
       }
     }
     .foodList {
       .foodNavbar {
         width: 110.3125rem;
+        @media screen and (max-width: 992px) {
+          width: 100%;
+          padding: 0 1rem;
+        }
         li {
           a {
             &:hover {
-              background: rgba(0, 0, 0, 0.086);
+              background: var(--color-gray-100);
             }
             &.active {
               background: rgb(227, 24, 55);
@@ -42,9 +53,16 @@
         }
       }
     }
-    .cakeWrapper {
-      .cakeBlock {
-        width: 121.5625rem;
+    .cakeBlock {
+      width: 121.5625rem;
+      @media screen and (max-width: 992px) {
+        width: 100%;
+        padding: 0 1rem;
+      }
+      .cakeList {
+        @media screen and (max-width: 992px) {
+          grid-template-columns: auto auto;
+        }
         .cakeImg {
           width: 100%;
           height: 200px;

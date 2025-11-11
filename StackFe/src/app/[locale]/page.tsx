@@ -5,6 +5,7 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { Footer } from "@/components";
 const Home = () => {
   return (
     <React.Fragment>
@@ -60,6 +61,7 @@ const Home = () => {
           </Link>
         </div>
       </div>
+      <Footer />
     </React.Fragment>
   );
 };

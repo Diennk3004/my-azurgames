@@ -75,10 +75,10 @@ const Header = () => {
           <div className={styles.block_icons2}>
             <div className={styles.block_flag}>
               <Link className={clsx(["flex", "row", "justify-center", "items-center", "cursor-pointer"])} href="/vi">
-                <Image src="/flag-en.png" width={30} height={16} alt="Flag vn" />
+                <Image src="/flag-vn.png" width={30} height={16} alt="Flag vn" />
               </Link>
               <Link className={clsx(["flex", "row", "justify-center", "items-center", "cursor-pointer"])} href="/en">
-                <Image src="/flag-vn.png" width={30} height={16} alt="Flag en" />
+                <Image src="/flag-en.png" width={30} height={16} alt="Flag en" />
               </Link>
             </div>
             <Link href="/" className={styles.ship}>

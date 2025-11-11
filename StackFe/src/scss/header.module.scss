@@ -1,0 +1,115 @@
+@use "color";
+.nav_header {
+  background: color.$primary;
+  .logo {
+    width: 18.75rem;
+    @media screen and (max-width: 992px) {
+      display: none;
+    }
+  }
+  .menu {
+    @media screen and (max-width: 992px) {
+      display: none;
+    }
+  }
+  .logoMobile {
+    @media screen and (max-width: 992px) {
+      display: block;
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+  .block_icons {
+    .cartShopping {
+      font-size: 2rem;
+      @media screen and (max-width: 992px) {
+        font-size: 1.5rem;
+      }
+      .quantity {
+        background: red;
+        font-size: 0.725rem;
+        right: -0.5rem;
+        border-radius: 0.1875rem;
+        padding: 0.0625rem 0.3125rem;
+      }
+    }
+    .menuOutlined {
+      @media screen and (max-width: 992px) {
+        display: block;
+        font-size: 1.126rem;
+      }
+    }
+    .closedMenu {
+      @media screen and (max-width: 992px) {
+        display: block;
+        font-size: 1.126rem;
+      }
+    }
+    .block_icons2 {
+      display: flex;
+      align-items: center;
+      column-gap: 1.5rem;
+      .user {
+        display: flex;
+        align-items: center;
+        a {
+          color: #fff;
+          font-size: 2rem;
+          @media screen and (max-width: 992px) {
+            font-size: 1.5rem;
+          }
+        }
+      }
+      .block_flag {
+        display: flex;
+        justify-content: flex-start;
+        column-gap: 0.5rem;
+        align-items: center;
+        @media screen and (max-width: 992px) {
+          display: none;
+        }
+      }
+      a.ship {
+        display: none;
+        @media screen and (max-width: 992px) {
+          display: flex;
+          align-items: center;
+          height: 100%;
+          color: #fff;
+          font-size: 1.5625rem;
+        }
+      }
+      a.promotion {
+        display: none;
+        @media screen and (max-width: 992px) {
+          display: flex;
+          align-items: center;
+          height: 100%;
+          color: #fff;
+        }
+        img {
+          width: 1.5rem;
+          height: auto;
+        }
+      }
+    }
+  }
+}
+.menuMobile {
+  background: color.$primary;
+  transform: translateX(-100%);
+  transition: transform 500ms, opacity 500ms;
+  z-index: 9999;
+  @media screen and (max-width: 992px) {
+    display: block;
+  }
+  ul {
+    margin-top: 1.25rem;
+    li {
+      padding: 0.8125rem 0.625rem;
+      .flags {
+        column-gap: 0.3125rem;
+      }
+    }
+  }
+}

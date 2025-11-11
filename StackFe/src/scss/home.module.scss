@@ -1,0 +1,110 @@
+@use "color";
+main {
+  .backgroundBlue {
+    background-image: url("../images/deep-see.png");
+    @media screen and (max-width: 992px) {
+      width: 100%;
+    }
+    .selectionGroup {
+      width: 46.5625rem;
+      @media screen and (max-width: 992px) {
+        width: 100%;
+      }
+      .tabBox {
+        background: rgba(255, 255, 255, 0.1);
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        border: 1px solid #717273;
+      }
+      .tabBoxActive {
+        background: #fff;
+        color: red;
+        position: relative;
+        top: 0.5625rem;
+        border: 0;
+        padding: 0.5rem 1.875rem;
+      }
+      .k2Box {
+        border: 1px solid #717273;
+        border-radius: 10px;
+        .drawBox {
+          background: #fdedef;
+          border-radius: 0.625rem;
+          padding: 1.875rem 3.45rem;
+          .textAddress {
+            border-radius: 0.35rem 0 0 0;
+            padding: 0.625rem 0.5rem;
+            border-bottom: 1px solid #00000036;
+            width: 35.75rem;
+            @media screen and (max-width: 992px) {
+              width: 100%;
+            }
+          }
+          .btnSearch {
+            background-color: color.$primary;
+            border-radius: 0rem 0.35rem 0rem 0rem;
+            font-size: 1rem;
+          }
+        }
+      }
+    }
+  }
+  .contentBottom {
+    background-color: #f2f4f8;
+    @media (max-width: 992px) {
+      width: 100%;
+    }
+    .favouriteDate {
+      width: 69.3125rem;
+      @media screen and (max-width: 992px) {
+        width: 100%;
+      }
+      .lameStack {
+        border-bottom: 1px solid #e0e0e0;
+        @media screen and (max-width: 576px) {
+          column-gap: 3rem;
+        }
+        .title {
+          font-size: 1.5625rem;
+          @media screen and (max-width: 576px) {
+            display: none;
+          }
+        }
+        .omega {
+          color: color.$black;
+          font-weight: 700;
+        }
+        .active {
+          color: #e31837;
+          border-bottom: 0.125rem solid #e31837;
+          padding: 0px 0px 0.75rem 0px;
+        }
+      }
+      .productList {
+        margin-top: 1.5rem;
+        display: grid;
+        grid-template-columns: auto auto auto auto;
+        column-gap: 1.875rem;
+        @media screen and (max-width: 576px) {
+          grid-template-columns: auto auto;
+          column-gap: 0.625rem;
+          row-gap: 0.625rem;
+        }
+        .productItem {
+          border-bottom-left-radius: 0.375rem;
+          border-bottom-right-radius: 0.375rem;
+          @media screen and (max-width: 992px) {
+            width: 10rem;
+          }
+          @media screen and (max-width: 576px) {
+            width: 100%;
+          }
+          .imageProduct {
+            border-top-left-radius: 0.375rem;
+            border-top-right-radius: 0.375rem;
+          }
+        }
+      }
+    }
+  }
+}

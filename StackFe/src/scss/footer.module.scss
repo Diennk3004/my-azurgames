@@ -1,0 +1,50 @@
+@use "color";
+.footer {
+  background: #00628f;
+  .middleFooter {
+    width: 69.3125rem;
+    @media screen and (max-width: 992px) {
+      width: 100%;
+    }
+    .contactFooter {
+      @media screen and (max-width: 992px) {
+        display: none;
+      }
+    }
+    .footerLogo {
+      border-color: black;
+      @media screen and (max-width: 992px) {
+        display: none;
+      }
+      .logoImageFooter {
+        width: 4.6875rem;
+      }
+    }
+    .footerCredential {
+      @media screen and (max-width: 992px) {
+        display: none;
+      }
+      width: 17.3125rem;
+      .credentialImg {
+        width: 9.125rem;
+      }
+    }
+    .hotLine {
+      @media screen and (max-width: 992px) {
+        width: 100%;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+      }
+    }
+    .menuFooter {
+      @media screen and (max-width: 992px) {
+        display: none;
+      }
+      li {
+        a {
+          color: #bcc1cb;
+        }
+      }
+    }
+  }
+}

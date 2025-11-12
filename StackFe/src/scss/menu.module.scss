@@ -24,8 +24,16 @@
       .menuContainer {
         width: 108.125rem;
         @media screen and (max-width: 992px) {
-          width: 100%;
-          padding: 0 1rem;
+          width: 800px;
+          column-gap: 0.9375rem;
+          padding: 0 0.5rem;
+        }
+        li {
+          a {
+            @media screen and (max-width: 992px) {
+              font-size: 0.8125rem;
+            }
+          }
         }
       }
     }
@@ -74,6 +82,9 @@
     width: 15%;
     @media screen and (max-width: 992px) {
       width: 100%;
+    }
+    .cartGrid {
+      grid-template-columns: 2rem 2rem 11.875rem auto;
     }
   }
 }

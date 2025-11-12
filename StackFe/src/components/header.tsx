@@ -28,8 +28,10 @@ const Header = () => {
     if (menuMobileRef && headerRef && menuMobileRef.current && headerRef.current) {
       const headerHeight: number = headerRef.current.clientHeight;
       const windowHeight: number = window.innerHeight;
+      const menuMobileHeight: number = windowHeight - headerHeight;
       menuMobileRef.current.style.top = `${headerHeight}px`;
-      menuMobileRef.current.style.height = `${windowHeight - headerHeight}px`;
+      menuMobileRef.current.style.height = `${menuMobileHeight}px`;
+      localStorage.setItem("heightWithoutHeader", menuMobileHeight.toString());
     }
   }, []);
   return (

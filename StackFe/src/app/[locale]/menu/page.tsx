@@ -72,7 +72,7 @@ const Menu = () => {
           const menuBarHeight: number = menuBarRef.current.clientHeight;
           const totalBarHeight: number = addressBarHeight + menuBarHeight;
           if (heightWithoutHeader) {
-            const blockHeight: number = parseFloat(heightWithoutHeader) - totalBarHeight - 10;
+            const blockHeight: number = parseFloat(heightWithoutHeader) - totalBarHeight - 20;
             setRemainedBarHeight(blockHeight);
           }
         }

@@ -7,6 +7,7 @@ import Link from "next/link";
 import React from "react";
 import { Footer } from "@/components";
 const Home = () => {
+  console.log("process.env.NEXT_PUBLIC_APP_ENV = ", process.env.NEXT_PUBLIC_APP_ENV);
   return (
     <React.Fragment>
       <div className={clsx(["mt-4", "flex", "justify-center"])}>

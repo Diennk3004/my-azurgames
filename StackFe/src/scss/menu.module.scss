@@ -1,90 +1,61 @@
 .wrapper {
-  @media screen and (max-width: 992px) {
-    display: block;
-    width: 100%;
-  }
   .colLeft {
-    width: 85%;
-    @media screen and (max-width: 992px) {
-      width: 100%;
-    }
-    .addressBar {
-      background-color: #e2f4fc;
-      .addressContainer {
-        width: 111.875rem;
-        color: #717273;
-        @media screen and (max-width: 992px) {
-          width: 100%;
-          padding: 0 1rem;
-        }
-      }
-    }
-    .menuFoodBar {
-      box-shadow: 0px 1px 0px 0px #dcdcdc;
-      .menuContainer {
-        width: 108.125rem;
-        @media screen and (max-width: 992px) {
-          width: 800px;
-          column-gap: 0.9375rem;
-          padding: 0 0.5rem;
-        }
-        li {
-          a {
-            @media screen and (max-width: 992px) {
-              font-size: 0.8125rem;
-            }
-          }
-        }
-      }
-    }
     .foodList {
       .foodNavbar {
-        width: 110.3125rem;
-        @media screen and (max-width: 992px) {
-          width: 100%;
-          padding: 0 1rem;
-        }
         li {
           a {
-            &:hover {
-              background: var(--color-gray-100);
-            }
             &.active {
-              background: rgb(227, 24, 55);
+              background: red;
               color: #fff;
             }
-            border: 1px solid #00000024;
-            img {
-              width: 1.25rem;
-            }
           }
-        }
-      }
-    }
-    .cakeBlock {
-      width: 121.5625rem;
-      @media screen and (max-width: 992px) {
-        width: 100%;
-        padding: 0 1rem;
-      }
-      .cakeList {
-        @media screen and (max-width: 992px) {
-          grid-template-columns: auto auto;
-        }
-        .cakeImg {
-          width: 100%;
-          height: 200px;
         }
       }
     }
   }
   .colRight {
-    width: 15%;
-    @media screen and (max-width: 992px) {
-      width: 100%;
-    }
     .cartGrid {
       grid-template-columns: 2rem 2rem 11.875rem auto;
+    }
+  }
+}
+.blockRadio {
+  input[type="radio"] {
+    top: -4px;
+    left: 6px;
+    &:checked {
+      & ~ .mask {
+        &::before {
+          border-color: black;
+        }
+        &::after {
+          position: absolute;
+          top: -5px;
+          left: 5px;
+          width: 15px;
+          height: 15px;
+          border-radius: 50%;
+          background: black;
+          z-index: 3;
+          content: " ";
+        }
+      }
+    }
+  }
+  .mask {
+    &::before {
+      position: absolute;
+      top: -10px;
+      left: 0px;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: #fff;
+      border-width: 2px;
+      border-style: solid;
+      border-color: #e5e5e5;
+      z-index: 1;
+      content: " ";
     }
   }
 }

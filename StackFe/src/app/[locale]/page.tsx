@@ -1,3 +1,4 @@
+import { Footer } from "@/components";
 import styles from "@/scss/home.module.scss";
 import { Colors } from "@/utils";
 import { SearchOutlined } from "@ant-design/icons";
@@ -5,13 +6,11 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { Footer } from "@/components";
 const Home = () => {
-  console.log("process.env.NEXT_PUBLIC_APP_ENV = ", process.env.NEXT_PUBLIC_APP_ENV);
   return (
     <React.Fragment>
       <div className={clsx(["mt-4", "flex", "justify-center"])}>
-        <Image src="/banner-1.jpg" alt="Dominos" width={4000} height={1688} quality={100} className={clsx(["h-200", "object-cover"])} />
+        <Image src="/banner-1.jpg" alt="Dominos" width={4000} height={1688} quality={100} className={clsx(["h-200", "object-cover", "w-full"])} />
       </div>
       <div className={clsx([styles.backgroundBlue, "pt-7", "pb-7", "pl-4", "pr-4", "mt-4", "flex", "justify-center", "items-center", "bg-repeat", "bg-cover"])}>
         <div className={styles.selectionGroup}>

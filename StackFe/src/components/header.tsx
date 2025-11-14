@@ -1,5 +1,4 @@
 "use client";
-import LogoMobile from "@/images/domino.svg";
 import styles from "@/scss/header.module.scss";
 import { CarOutlined, CloseOutlined, MenuOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import clsx from "clsx";
@@ -25,14 +24,32 @@ const Header = () => {
     }
   };
   React.useEffect(() => {
+    let headerHeight: number = 0;
     if (menuMobileRef && headerRef && menuMobileRef.current && headerRef.current) {
-      const headerHeight: number = headerRef.current.clientHeight;
+      headerHeight = headerRef.current.clientHeight;
       const windowHeight: number = window.innerHeight;
       const menuMobileHeight: number = windowHeight - headerHeight;
       menuMobileRef.current.style.top = `${headerHeight}px`;
       menuMobileRef.current.style.height = `${menuMobileHeight}px`;
       localStorage.setItem("heightWithoutHeader", menuMobileHeight.toString());
     }
+    window.onscroll = function () {
+      if (headerRef && headerRef.current) {
+        const scrollTop: number = window.scrollY;
+        const headerWidth: number = headerRef.current.clientWidth;
+        if (scrollTop > headerHeight) {
+          headerRef.current.style.position = "fixed";
+          headerRef.current.style.top = "0px";
+          headerRef.current.style.width = `${headerWidth}px`;
+          headerRef.current.style.margin = "0 auto";
+          headerRef.current.style.zIndex = "9000";
+        } else {
+          if (scrollTop === 0) {
+            headerRef.current.style.position = "static";
+          }
+        }
+      }
+    };
   }, []);
   return (
     <React.Fragment>

@@ -98,13 +98,13 @@ const Menu = () => {
   return (
     <React.Fragment>
       <div className={clsx(["lg:flex", "flex-row", "justify-between", styles.wrapper])}>
-        <div className={clsx(["pb-3", "bg-gray-100", "lg:w-540", styles.colLeft])}>
+        <div className={clsx(["pb-3", "bg-gray-100", "lg:w-[75%]", styles.colLeft])}>
           <div className={clsx([styles.addressBar, "justify-center", "pt-2", "pb-2", "flex", "pl-3", "pr-3", "bg-sky-100"])} ref={addressBarRef}>
-            <div className={clsx([styles.addressContainer, "lg:w-440", "flex", "items-center", "pt-1", "pb-1", "font-bold", "text-gray-500"])}>Bạn Đang Chọn: Giao Hàng Tận NơiTrần Quang Diệu,phường 14,Quận 3,Hồ Chí Minh,Việt Nam</div>
+            <div className={clsx([styles.addressContainer, "lg:w-[80%]", "flex", "items-center", "pt-1", "pb-1", "font-bold", "text-gray-500"])}>Bạn Đang Chọn: Giao Hàng Tận NơiTrần Quang Diệu,phường 14,Quận 3,Hồ Chí Minh,Việt Nam</div>
           </div>
           <div className={clsx([styles.menuFoodBar, "pt-0", "pb-0", "pl-3", "pr-3", "flex", "justify-center", "bg-white", "shadow-b"])} style={{ boxShadow: "0px 1px 0px 0px #dcdcdc" }} ref={menuBarRef}>
             {menuList.length > 0 && (
-              <ul className={clsx([styles.menuContainer, "lg:w-432", "flex", "max-md:gap-x-4", "justify-between", "overflow-y-hidden", "overflow-x-scroll", "slider-container"])}>
+              <ul className={clsx([styles.menuContainer, "lg:w-[73%]", "flex", "max-md:gap-x-4", "justify-between", "overflow-y-hidden", "overflow-x-scroll", "slider-container"])}>
                 {menuList.map((item: string, idx: number) => {
                   let active: boolean = false;
                   if (item === "Pizza") {
@@ -124,7 +124,7 @@ const Menu = () => {
           <div className={clsx(["overflow-x-hidden", "overflow-y-scroll", "max-lg:pl-5", "max-lg:pr-5"])} style={{ height: `${remainedBarHeight}px` }}>
             <div className={clsx([styles.foodList, "flex", "justify-center", "mt-5"])}>
               {foodList.length > 0 && (
-                <ul className={clsx([styles.foodNavbar, "lg:w-440", "flex", "justify-start", "gap-y-3", "gap-x-3", "flex-wrap"])}>
+                <ul className={clsx([styles.foodNavbar, "lg:w-[75%]", "flex", "justify-start", "gap-y-3", "gap-x-3", "flex-wrap"])}>
                   {foodList.map((item: IFood, idx: number) => {
                     return (
                       <li key={`food-item-${idx}`}>
@@ -138,20 +138,20 @@ const Menu = () => {
                 </ul>
               )}
             </div>
-            <div className={clsx([styles.cakeBlock, "lg:w-480", "flex", "flex-col", "items-center", "mt-10", "ml-auto", "mr-auto"])}>
+            <div className={clsx([styles.cakeBlock, "lg:w-[87%]", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
               <h3 className={clsx(["uppercase", "text-2xl", "font-bold"])}>Super Topping</h3>
               {cakeList.length > 0 && (
                 <div className={clsx(["grid", "lg:grid-cols-4", "sm:grid-cols-2", "gap-x-8", "gap-y-5", "mt-8", styles.cakeList])}>
                   {cakeList.map((item: ICake, idx: number) => {
                     return (
                       <div key={`cake-item-${idx}`} className={clsx(["bg-white", "rounded-md", "border", "border-gray-200", "pb-4"])}>
-                        <button onClick={handleOpenModal(true)}>
-                          <Image src={`/${item.img}`} alt="Dominos" width={2000} height={1334} className={clsx(["h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
-                        </button>
+                        <Link href="/pizza/beef">
+                          <Image src={`/${item.img}`} alt="Dominos" width={2000} height={1334} className={clsx(["w-full", "h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
+                        </Link>
                         <h3 className={clsx(["text-center", "mt-3", "font-bold"])}>
-                          <button style={{ color: Colors.blue }} onClick={handleOpenModal(true)}>
+                          <Link style={{ color: Colors.blue }} href="/">
                             Ocean Mania
-                          </button>
+                          </Link>
                         </h3>
                         <div className={clsx(["text-center", "mt-3", "font-bold"])}>9 inch - 205,000 đ</div>
                       </div>
@@ -160,7 +160,7 @@ const Menu = () => {
                 </div>
               )}
             </div>
-            <div className={clsx([styles.cakeBlock, "lg:w-480", "flex", "flex-col", "items-center", "mt-10", "ml-auto", "mr-auto"])}>
+            <div className={clsx([styles.cakeBlock, "lg:w-[87%]", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
               <h3 className={clsx(["uppercase", "text-2xl", "font-bold"])}>Seafood Cravers</h3>
               {cakeList.length > 0 && (
                 <div className={clsx(["grid", "lg:grid-cols-4", "sm:grid-cols-2", "gap-x-8", "gap-y-5", "mt-8", styles.cakeList])}>
@@ -168,7 +168,7 @@ const Menu = () => {
                     return (
                       <div key={`cake-item-${idx}`} className={clsx(["bg-white", "rounded-md", "border", "border-gray-200", "pb-4"])}>
                         <button onClick={handleOpenModal(true)}>
-                          <Image src={`/${item.img}`} alt="Dominos" width={2000} height={1334} className={clsx(["h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
+                          <Image src={`/${item.img}`} alt="Dominos" width={2000} height={1334} className={clsx(["w-full", "h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
                         </button>
                         <h3 className={clsx(["text-center", "mt-3", "font-bold"])}>
                           <button style={{ color: Colors.blue }} onClick={handleOpenModal(true)}>
@@ -184,7 +184,7 @@ const Menu = () => {
             </div>
           </div>
         </div>
-        <div className={clsx(["pl-4", "pr-4", "pt-4", "pb-4", "relative", "border-l", "border-gray-200", "lg:grow", styles.colRight])}>
+        <div className={clsx(["pl-4", "pr-4", "pt-4", "pb-4", "relative", "border-l", "border-gray-200", "lg:w-[25%]", styles.colRight])}>
           {cart.length > 0 ? (
             <React.Fragment>
               <div className={clsx(["flex", "justify-between"])}>
@@ -250,17 +250,22 @@ const Menu = () => {
       </div>
       <div className={clsx(["fixed", "top-0", "left-0", "w-screen", "h-screen", stylesModalDialog.modal])} ref={modalRef}>
         <div className={clsx(["absolute", "top-0", "left-0", "w-screen", "h-screen", "bg-gray-950", "opacity-50"])} onClick={handleOpenModal(false)}></div>
-        <div className={clsx(["absolute", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "top-[50%]", "left-[50%]", "-ml-98.75", "-mt-98.75", "w-197.5", "h-180", "max-lg:w-[500px]", "max-lg:-ml-[250px]", stylesModalDialog.dialog])} ref={dialogRef}>
-          <div className={clsx(["relative", "lg:w-[335px]", "max-lg:h-[200px]"])}>{/* <Image src="/Pizzaminsea.jpg" alt="Dominos" width={832} height={1440} className={clsx(["object-cover", "rounded-tl-lg", "lg:rounded-bl-lg", "max-lg:rounded-tr-lg", "w-full", "h-full"])} /> */}</div>
-          <div className={clsx(["grow", "relative"])}>
+        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "ml-auto", "mr-auto", "mt-auto", "mb-auto", "w-[800px]", "h-[700px]", "max-lg:w-[400px]", "max-lg:h-full", "max-lg:mt-20", "max-lg:mb-20", stylesModalDialog.dialog])} ref={dialogRef}>
+          <div className={clsx(["lg:w-[45%]", "max-lg:h-[200px]", "relative"])}>
+            <Image src="/Pizzaminsea.jpg" alt="Dominos" width={832} height={1440} className={clsx(["object-cover", "rounded-tl-lg", "lg:rounded-bl-lg", "max-lg:rounded-tr-lg", "h-full"])} />
+            <div className={clsx(["absolute", "lg:hidden", "top-0", "right-0", "bg-orange-700", "text-white", "rounded-tr-lg", "flex", "justify-center", "items-center", "w-10", "h-10"])}>
+              <CloseOutlined onClick={handleOpenModal(false)} />
+            </div>
+          </div>
+          <div className={clsx(["lg:w-[65%]", "relative"])}>
             <div className={clsx(["absolute", "max-lg:hidden", "top-0", "right-0", "bg-orange-700", "text-white", "rounded-tr-lg", "flex", "justify-center", "items-center", "w-10", "h-10"])}>
               <CloseOutlined onClick={handleOpenModal(false)} />
             </div>
-            <div className={clsx(["pt-2", "pl-7", "pr-7"])}>
+            <div className={clsx(["pt-2", "pl-8", "pr-10"])}>
               <div className={clsx("overflow-x-hidden", "overflow-y-scroll", "h-[600px]", "max-lg:h-[420px]")}>
                 <h3 className={clsx(["font-bold", "text-2xl", "text-cyan-700"])}>Pizza Siêu Topping Hải Sản Nhiệt Đới Xốt Tiêu - Super Topping Pizzamin Sea</h3>
                 <div className={clsx(["mt-6", "text-gray-500", "font-bold", "text-sm"])}>Extra protein toppings by 50%: Shrimp, Squid; Extra Mozzarella Cheese, Cheddar Cheese, Pineapple, Onion, Mayonnaise, Black Pepper Sauce</div>
-                <div className={clsx(["mt-10", "mb-10", "border-t-2", "border-gray-400"])} style={{ width: "70px" }}></div>
+                <div className={clsx(["mt-10", "mb-10", "border-t-2", "border-gray-400", "w-[70px]"])}></div>
                 <div>
                   <div className={clsx(["pl-3", "font-bold"])}>Crust</div>
                   <div className={clsx(["pl-6", "mt-3"])}>
@@ -299,10 +304,10 @@ const Menu = () => {
             </div>
             <div style={{ borderTopWidth: 1, borderTopColor: "var(--color-gray-200)", boxShadow: "rgb(196 196 196 / 53%) 0px 0px 10px 0px" }} className={clsx(["p-3", "gap-x-1", "absolute", "w-full", "bottom-0", "flex", "justify-between", "items-center"])}>
               <div className={clsx(["flex"])}>
-                <button className={clsx(["bg-gray-200", "rounded-tl-sm", "rounded-bl-sm", "outline-0", "border-0", "pl-4", "pr-4"])} style={{ width: "50px", height: "50px" }}>
+                <button className={clsx(["bg-gray-200", "rounded-tl-sm", "rounded-bl-sm", "outline-0", "border-0", "pl-4", "pr-4", "w-[50px]", "h-[50px]"])}>
                   <MinusOutlined />
                 </button>
-                <input type="text" value={1} style={{ width: "50px" }} className={clsx(["text-center", "bg-gray-200", "outline-0", "border-l-gray-300", "border-r-gray-300", "border-l", "border-r"])} readOnly={true} />
+                <input type="text" value={1} className={clsx(["w-[50px]", "text-center", "bg-gray-200", "outline-0", "border-l-gray-300", "border-r-gray-300", "border-l", "border-r"])} readOnly={true} />
                 <button className={clsx(["bg-gray-200", "rounded-tr-sm", "rounded-br-sm", "outline-0", "border-0", "pl-4", "pr-4"])}>
                   <PlusOutlined />
                 </button>

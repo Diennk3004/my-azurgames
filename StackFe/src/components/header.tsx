@@ -5,12 +5,15 @@ import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
+import { useConfig } from "@/hooks";
 const Header = () => {
   const [isOpenMenu, setOpenMenu] = React.useState(false);
   const menuMobileRef = React.useRef<HTMLDivElement>(null);
   const headerRef = React.useRef<HTMLDivElement>(null);
   const t = useTranslations("page_translate");
+  const { onChangeLocale } = useConfig();
   const handleOpenMenu = () => {
     setOpenMenu(!isOpenMenu);
     if (menuMobileRef && headerRef && menuMobileRef.current && headerRef.current) {
@@ -51,6 +54,10 @@ const Header = () => {
       }
     };
   }, []);
+  const handleLanguageChange = (locale: string) => () => {
+    onChangeLocale(locale);
+    redirect(`/${locale}`);
+  };
   return (
     <React.Fragment>
       <header className={clsx(["flex", "items-center", "justify-between", "pl-4", "pr-4", "pt-4", "pb-4", styles.nav_header])} ref={headerRef}>
@@ -93,12 +100,12 @@ const Header = () => {
         <div className={clsx(["flex", "items-center", "gap-x-10", "pl-4", "pr-4", styles.block_icons])}>
           <div className={styles.block_icons2}>
             <div className={styles.block_flag}>
-              <Link className={clsx(["flex", "row", "justify-center", "items-center", "cursor-pointer"])} href="/vi">
+              <button className={clsx(["flex", "row", "justify-center", "items-center", "cursor-pointer"])} onClick={handleLanguageChange("vi")}>
                 <Image src="/flag-vn.png" width={30} height={16} alt="Flag vn" />
-              </Link>
-              <Link className={clsx(["flex", "row", "justify-center", "items-center", "cursor-pointer"])} href="/en">
+              </button>
+              <button className={clsx(["flex", "row", "justify-center", "items-center", "cursor-pointer"])} onClick={handleLanguageChange("en")}>
                 <Image src="/flag-en.png" width={30} height={16} alt="Flag en" />
-              </Link>
+              </button>
             </div>
             <Link href="/" className={styles.ship}>
               <CarOutlined />
@@ -185,12 +192,12 @@ const Header = () => {
           </li>
           <li>
             <div className={clsx(["flex", "flex-row", "gap-x-2"])}>
-              <Link href="/en">
+              <button onClick={handleLanguageChange("en")}>
                 <Image src="/flag-en.png" width={30} height={30} alt="Dominos" />
-              </Link>
-              <Link href="/vi">
+              </button>
+              <button onClick={handleLanguageChange("vi")}>
                 <Image src="/flag-vn.png" width={30} height={30} alt="Dominos" />
-              </Link>
+              </button>
             </div>
           </li>
         </ul>

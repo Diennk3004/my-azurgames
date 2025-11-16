@@ -145,11 +145,11 @@ const Menu = () => {
                   {cakeList.map((item: ICake, idx: number) => {
                     return (
                       <div key={`cake-item-${idx}`} className={clsx(["bg-white", "rounded-md", "border", "border-gray-200", "pb-4"])}>
-                        <Link href="/pizza/beef">
+                        <Link href="/menu/pizza/beef">
                           <Image src={`/${item.img}`} alt="Dominos" width={2000} height={1334} className={clsx(["w-full", "h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
                         </Link>
                         <h3 className={clsx(["text-center", "mt-3", "font-bold"])}>
-                          <Link style={{ color: Colors.blue }} href="/">
+                          <Link style={{ color: Colors.blue }} href="/menu/pizza/beef">
                             Ocean Mania
                           </Link>
                         </h3>
@@ -250,7 +250,7 @@ const Menu = () => {
       </div>
       <div className={clsx(["fixed", "top-0", "left-0", "w-screen", "h-screen", stylesModalDialog.modal])} ref={modalRef}>
         <div className={clsx(["absolute", "top-0", "left-0", "w-screen", "h-screen", "bg-gray-950", "opacity-50"])} onClick={handleOpenModal(false)}></div>
-        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "ml-auto", "mr-auto", "mt-auto", "mb-auto", "w-[800px]", "h-[700px]", "max-lg:w-[400px]", "max-lg:h-full", "max-lg:mt-20", "max-lg:mb-20", stylesModalDialog.dialog])} ref={dialogRef}>
+        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "ml-auto", "mr-auto", "mt-20", "w-[800px]", "h-[700px]", "max-lg:w-[400px]", "max-lg:h-full", "max-lg:mt-20", "max-lg:mb-20", stylesModalDialog.dialog])} ref={dialogRef}>
           <div className={clsx(["lg:w-[45%]", "max-lg:h-[200px]", "relative"])}>
             <Image src="/Pizzaminsea.jpg" alt="Dominos" width={832} height={1440} className={clsx(["object-cover", "rounded-tl-lg", "lg:rounded-bl-lg", "max-lg:rounded-tr-lg", "h-full"])} />
             <div className={clsx(["absolute", "lg:hidden", "top-0", "right-0", "bg-orange-700", "text-white", "rounded-tr-lg", "flex", "justify-center", "items-center", "w-10", "h-10"])}>

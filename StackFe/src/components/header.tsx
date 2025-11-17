@@ -6,10 +6,12 @@ import { CarOutlined, CloseOutlined, MenuOutlined, ShoppingCartOutlined, UserOut
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import React from "react";
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isOpenMenu, setOpenMenu] = React.useState(false);
   const menuMobileRef = React.useRef<HTMLDivElement>(null);
   const headerRef = React.useRef<HTMLDivElement>(null);
@@ -57,9 +59,7 @@ const Header = () => {
   }, []);
   const handleLanguageChange = (locale: string) => () => {
     onChangeLocale(locale);
-    router.push({ pathname });
     router.replace(pathname, { locale });
-    console.log("pathname = ", pathname);
   };
   return (
     <React.Fragment>

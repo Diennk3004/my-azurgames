@@ -23,8 +23,13 @@ export class CategoryFoodResolver {
   }
 
   @Query(() => [CategoryFoodType])
-  tagList(@Args("menu") menu: string) {
+  tagList(@Args("menu", { type: () => String }) menu: string) {
     return this.categoryFoodService.getTag(menu);
+  }
+
+  @Query(() => [CategoryFoodType])
+  getAll() {
+    return this.categoryFoodService.getAll();
   }
 
   @Mutation(() => [CategoryFoodType])

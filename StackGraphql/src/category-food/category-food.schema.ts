@@ -6,6 +6,9 @@ type CategoryFoodDocument = HydratedDocument<CategoryFood>;
 @Schema({ collection: "category_food" })
 class CategoryFood {
   @Prop()
+  _id: string;
+
+  @Prop()
   category_food_name_en: string;
 
   @Prop()

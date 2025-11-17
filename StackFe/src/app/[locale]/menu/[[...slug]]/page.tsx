@@ -1,4 +1,7 @@
 "use client";
+import { GET_FOOD, GET_MENU_FOOD, GET_MENU_TAG } from "@/graphql-client";
+import { useConfig } from "@/hooks";
+import { Link } from "@/i18n/navigation";
 import styles from "@/scss/menu.module.scss";
 import stylesModalDialog from "@/scss/modal-dialog.module.scss";
 import { Colors, getUriImage } from "@/utils";
@@ -7,15 +10,7 @@ import { useLazyQuery } from "@apollo/client";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { Link } from "@/i18n/navigation";
 import React from "react";
-import { GET_MENU_FOOD, GET_MENU_TAG } from "@/graphql-client";
-import { useConfig } from "@/hooks";
-import { useSearchParams } from "next/navigation";
-type IFood = {
-  title: string;
-  img: string;
-};
 type ICake = {
   title: string;
   img: string;
@@ -32,15 +27,10 @@ type IMenu = {
   category_food_image: string;
   category_food_parent_id: string;
 };
-const Menu = () => {
-  const foodList: IFood[] = [
-    { title: "All", img: "" },
-    { title: "Seafood", img: "fried-shrimp.png" },
-    { title: "Beef", img: "cut-of-meat.png" },
-    { title: "Chicken", img: "poultry-leg.png" },
-    { title: "Pork", img: "bacon.png" },
-    { title: "Vegetarian", img: "leafy-green.png" }
-  ];
+type Props = {
+  params: Promise<{ slug: string }>;
+};
+const Menu: React.FC<Props> = ({ params }) => {
   const cakeList: ICake[] = [
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
@@ -65,7 +55,6 @@ const Menu = () => {
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" }
   ];
-  const searchParams = useSearchParams();
   const addressBarRef = React.useRef<HTMLDivElement>(null);
   const menuBarRef = React.useRef<HTMLDivElement>(null);
   const modalRef = React.useRef<HTMLDivElement>(null);
@@ -73,11 +62,13 @@ const Menu = () => {
   const { locale } = useConfig();
   const [menuList, setMenuList] = React.useState<IMenu[]>([]);
   const [tagList, setTagList] = React.useState<IMenu[]>([]);
+  const [menuSlug, setMenuSlug] = React.useState<string>("");
+  const [tagSlug, setTagSlug] = React.useState<string>("");
   const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
   const [remainedBarHeight, setRemainedBarHeight] = React.useState<number>(0);
   const [getMenuList] = useLazyQuery(GET_MENU_FOOD, { fetchPolicy: "network-only" });
   const [getTagList] = useLazyQuery(GET_MENU_TAG, { fetchPolicy: "network-only" });
-
+  const [getFood] = useLazyQuery(GET_FOOD, { fetchPolicy: "network-only" });
   React.useEffect(() => {
     const getHeight = async () => {
       if (addressBarRef && menuBarRef && addressBarRef.current && menuBarRef.current) {
@@ -104,10 +95,26 @@ const Menu = () => {
     };
     getHeight();
     getMenu();
+    params.then((response: any) => {
+      const { slug } = response;
+      let lblMenuSlug: string = "";
+      let lblTagSlug: string = "";
+      if (slug) {
+        if (slug.length === 1) {
+          lblMenuSlug = slug[0];
+        }
+        if (slug.length === 2) {
+          lblMenuSlug = slug[0];
+          lblTagSlug = slug[1];
+        }
+      }
+      setMenuSlug(lblMenuSlug);
+      setTagSlug(lblTagSlug);
+    });
   }, []);
   React.useEffect(() => {
     const getTag = () => {
-      const menu = searchParams.get("menu");
+      const menu = menuSlug;
       if (menu) {
         getTagList({ variables: { menu } })
           .then((response: any) => {
@@ -119,7 +126,14 @@ const Menu = () => {
       }
     };
     getTag();
-  }, [searchParams.get("menu")]);
+  }, [menuSlug]);
+  React.useEffect(() => {
+    if (menuSlug && tagSlug) {
+      getFood({ variables: { menu_slug: menuSlug, tag_slug: tagSlug } })
+        .then((response: any) => {})
+        .catch(() => {});
+    }
+  }, [menuSlug, tagSlug]);
   const handleOpenModal = (val: boolean) => () => {
     setOpenModal(val);
     if (modalRef && dialogRef && modalRef.current && dialogRef.current) {
@@ -138,7 +152,6 @@ const Menu = () => {
       }
     }
   };
-  console.log("tagList = ", tagList);
   return (
     <React.Fragment>
       <div className={clsx(["lg:flex", "flex-row", "justify-between", styles.wrapper])}>
@@ -153,7 +166,7 @@ const Menu = () => {
                   const active: boolean = false;
                   return (
                     <li key={`menu-item-${idx}`}>
-                      <Link href={{ pathname: "/menu", query: { menu: item.category_food_slug } }} className={clsx([active && "border-b-2", "max-md:text-sm", active && "border-red-400", "pb-2", "pt-2", "block", "font-bold"])}>
+                      <Link href={{ pathname: `/menu/${item.category_food_slug}` }} className={clsx([active && "border-b-2", "max-md:text-sm", active && "border-red-400", "pb-2", "pt-2", "block", "font-bold"])}>
                         {locale === "en" ? item.category_food_name_en : item.category_food_name_vi}
                       </Link>
                     </li>
@@ -169,7 +182,7 @@ const Menu = () => {
                   {tagList.map((item: IMenu, idx: number) => {
                     return (
                       <li key={`food-item-${idx}`}>
-                        <Link href={{ pathname: "/menu", query: { menu: "", tag: item.category_food_slug } }} className={clsx(["flex", "bg-white", "flex-row", "justify-between", "gap-x-2", "items-center", "pl-3", "pr-3", "pt-1.75", "pb-1.75", "text-sm", "font-bold", "rounded-md", "border", "border-gray-200", "border", "border-gray-200", "hover:bg-gray-100", false && styles.active])}>
+                        <Link href={{ pathname: `/menu/${menuSlug}/${item.category_food_slug}` }} className={clsx(["flex", "bg-white", "flex-row", "justify-between", "gap-x-2", "items-center", "pl-3", "pr-3", "pt-1.75", "pb-1.75", "text-sm", "font-bold", "rounded-md", "border", "border-gray-200", "border", "border-gray-200", "hover:bg-gray-100", false && styles.active])}>
                           {item.category_food_image && <Image src={getUriImage(item.category_food_image)} alt="Dominos" width={160} height={160} className={clsx(["w-5"])} />}
                           <span>{locale === "en" ? item.category_food_name_en : item.category_food_name_vi}</span>
                         </Link>

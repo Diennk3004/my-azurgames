@@ -7,6 +7,7 @@ import { CategoryFood, CategoryFoodSchema } from "./category-food.schema";
 
 @Module({
   imports: [MongooseModule.forFeature([{ name: CategoryFood.name, schema: CategoryFoodSchema }]), UserModule],
-  providers: [CategoryFoodResolver, CategoryFoodService]
+  providers: [CategoryFoodResolver, CategoryFoodService],
+  exports: [CategoryFoodService]
 })
 export class CategoryFoodModule {}

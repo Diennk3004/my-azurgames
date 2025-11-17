@@ -22,12 +22,7 @@ export class FoodResolver {
   }
 
   @Query(() => [FoodType])
-  foodList(
-    @Args("category_food_id", { type: () => String, nullable: true }) category_food_id: string,
-    @Args("perpage", { type: () => Int }) perpage: number,
-    @Args("keyword", { type: () => String, nullable: true }) keyword: string,
-    @Context("req") req: Request
-  ) {
-    return this.foodService.getList(category_food_id, perpage, keyword, req);
+  foodList(@Args("menu_slug", { type: () => String }) menu_slug: string, @Args("tag_slug", { type: () => String, nullable: true }) tag_slug: string) {
+    return this.foodService.getList(menu_slug, tag_slug);
   }
 }

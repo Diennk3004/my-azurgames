@@ -85,4 +85,12 @@ export class CategoryFoodService {
       throw new BadRequestException(err.message);
     }
   };
+  getAll = async () => {
+    try {
+      let items = await this.categoryFoodModel.find();
+      return items;
+    } catch (err: any) {
+      throw new BadRequestException(err.message);
+    }
+  };
 }

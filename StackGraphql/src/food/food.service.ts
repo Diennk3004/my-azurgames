@@ -1,21 +1,23 @@
+import { CategoryFood } from "@/category-food/category-food.schema";
+import { CategoryFoodService } from "@/category-food/category-food.service";
 import { UserService } from "@/user/user.service";
-import { convertToAlias } from "@/utils";
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { InjectModel } from "@nestjs/mongoose";
 import { Request } from "express";
 import { Model } from "mongoose";
-import { Food } from "./food.schema";
 import { CreateFoodInput, UpdateFoodInput } from "./dto";
+import { Food } from "./food.schema";
 
 @Injectable()
 export class FoodService {
   constructor(
     @InjectModel(Food.name) private foodModel: Model<Food>,
-    private userService: UserService
+    private userServices: UserService,
+    private categoryFoodServices: CategoryFoodService
   ) {}
   create = async (createFoodInput: CreateFoodInput, req: Request) => {
     try {
-      const isAuthenticated: boolean = await this.userService.checkAuthorized(req);
+      const isAuthenticated: boolean = await this.userServices.checkAuthorized(req);
       if (isAuthenticated) {
         let foodList = await this.foodModel.find({
           $or: [{ food_name_en: createFoodInput.food_name_en }, { food_name_vi: createFoodInput.food_name_vi }]
@@ -36,7 +38,7 @@ export class FoodService {
   };
   update = async (updateFoodInput: UpdateFoodInput, req: Request) => {
     try {
-      const isAuthenticated: boolean = await this.userService.checkAuthorized(req);
+      const isAuthenticated: boolean = await this.userServices.checkAuthorized(req);
       if (isAuthenticated) {
         let categoryFoodList = await this.foodModel.find({
           $or: [{ food_name_en: updateFoodInput.food_name_en }, { food_name_vi: updateFoodInput.food_name_vi }],
@@ -75,7 +77,7 @@ export class FoodService {
   };
   delete = async (id: string, req: Request) => {
     try {
-      const isAuthenticated: boolean = await this.userService.checkAuthorized(req);
+      const isAuthenticated: boolean = await this.userServices.checkAuthorized(req);
       if (isAuthenticated) {
         await this.foodModel.deleteOne({ _id: id });
         let list = await this.foodModel.find({});
@@ -87,39 +89,38 @@ export class FoodService {
       throw new BadRequestException(err.message);
     }
   };
-  getList = async (category_sport_id: string, perpage: number, keyword: string, req: Request) => {
+  getList = async (menu_slug: string, tag_slug: string) => {
     try {
-      const isAuthenticated: boolean = await this.userService.checkAuthorized(req);
-      if (isAuthenticated) {
-        let where = {};
-        if (category_sport_id) {
-          where["category_sport_id"] = category_sport_id;
+      let where = {};
+      if (menu_slug && tag_slug) {
+        let category_food_id: string = "";
+        let menuList: CategoryFood[] = await this.categoryFoodServices.getTag(menu_slug);
+
+        let menuData: CategoryFood = menuList.find((item) => item.category_food_slug === tag_slug);
+        console.log("menuData = ", menuData);
+        if (menuData) {
+          category_food_id = menuData._id;
+          let where1 = { category_food_id };
+          where["$or"] = [where1];
         }
-        if (keyword) {
-          let where1 = { ground_name: new RegExp(keyword, "i") };
-          let where2 = { "ground_branch.address": new RegExp(keyword, "i") };
-          where["$or"] = [where1, where2];
-        }
-        let list = await this.foodModel.aggregate([
-          {
-            $addFields: { id_category_food: { $toString: "$_id" } }
-          },
-          {
-            $lookup: {
-              from: "category_food",
-              localField: "category_food_id",
-              foreignField: "id_category_food",
-              as: "food_category"
-            }
-          },
-          {
-            $match: where
-          }
-        ]);
-        return list;
-      } else {
-        throw new BadRequestException("NOT_AUTHENTICATED");
       }
+      let list = await this.foodModel.aggregate([
+        {
+          $addFields: { id_category_food: { $toString: "$_id" } }
+        },
+        {
+          $lookup: {
+            from: "category_food",
+            localField: "category_food_id",
+            foreignField: "id_category_food",
+            as: "food_category"
+          }
+        },
+        {
+          $match: where
+        }
+      ]);
+      return list;
     } catch (err: any) {
       throw new BadRequestException(err.message);
     }

@@ -22,7 +22,7 @@ export class FoodResolver {
   }
 
   @Query(() => [FoodType])
-  getFoodList(
+  foodList(
     @Args("category_food_id", { type: () => String, nullable: true }) category_food_id: string,
     @Args("perpage", { type: () => Int }) perpage: number,
     @Args("keyword", { type: () => String, nullable: true }) keyword: string,

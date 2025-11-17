@@ -5,6 +5,7 @@ import { Model } from "mongoose";
 import { UserService } from "@/user/user.service";
 import { CreateCategoryFoodInput, UpdateCategoryFoodInput } from "./dto";
 import { Request } from "express";
+import { CategoryFoodType } from "./types";
 @Injectable()
 export class CategoryFoodService {
   constructor(
@@ -29,28 +30,23 @@ export class CategoryFoodService {
     try {
       const isAuthenticated: boolean = await this.userService.checkAuthorized(req);
       if (isAuthenticated) {
-        let categorySportList = await this.categoryFoodModel.find({
-          $or: [{ category_food_name_en: updateCategoryFoodInput.category_food_name_en }, { category_food_name_vi: updateCategoryFoodInput.category_food_name_vi }],
-          _id: { $ne: updateCategoryFoodInput.id }
-        });
-        if (categorySportList && categorySportList.length > 0) {
-          throw new BadRequestException("Category sport is duplicated");
-        } else {
-          if (updateCategoryFoodInput.category_food_name_en) {
-            await this.categoryFoodModel.updateOne({ _id: updateCategoryFoodInput.id }, { category_food_name_en: updateCategoryFoodInput.category_food_name_en.trim() });
-          }
-          if (updateCategoryFoodInput.category_food_name_vi) {
-            await this.categoryFoodModel.updateOne({ _id: updateCategoryFoodInput.id }, { category_food_name_vi: updateCategoryFoodInput.category_food_name_vi.trim() });
-          }
-          if (updateCategoryFoodInput.category_food_image) {
-            await this.categoryFoodModel.updateOne({ _id: updateCategoryFoodInput.id }, { category_food_image: updateCategoryFoodInput.category_food_image });
-          }
-          if (updateCategoryFoodInput.category_food_parent_id) {
-            await this.categoryFoodModel.updateOne({ _id: updateCategoryFoodInput.id }, { category_food_parent_id: updateCategoryFoodInput.category_food_parent_id });
-          }
-          const item = await this.categoryFoodModel.findById(updateCategoryFoodInput.id);
-          return item;
+        if (updateCategoryFoodInput.category_food_name_en) {
+          await this.categoryFoodModel.updateOne({ _id: updateCategoryFoodInput.id }, { category_food_name_en: updateCategoryFoodInput.category_food_name_en.trim() });
         }
+        if (updateCategoryFoodInput.category_food_name_vi) {
+          await this.categoryFoodModel.updateOne({ _id: updateCategoryFoodInput.id }, { category_food_name_vi: updateCategoryFoodInput.category_food_name_vi.trim() });
+        }
+        if (updateCategoryFoodInput.category_food_slug) {
+          await this.categoryFoodModel.updateOne({ _id: updateCategoryFoodInput.id }, { category_food_slug: updateCategoryFoodInput.category_food_slug.trim() });
+        }
+        if (updateCategoryFoodInput.category_food_image) {
+          await this.categoryFoodModel.updateOne({ _id: updateCategoryFoodInput.id }, { category_food_image: updateCategoryFoodInput.category_food_image });
+        }
+        if (updateCategoryFoodInput.category_food_parent_id) {
+          await this.categoryFoodModel.updateOne({ _id: updateCategoryFoodInput.id }, { category_food_parent_id: updateCategoryFoodInput.category_food_parent_id });
+        }
+        const item = await this.categoryFoodModel.findById(updateCategoryFoodInput.id);
+        return item;
       } else {
         throw new BadRequestException("NOT_AUTHENTICATED");
       }
@@ -72,15 +68,19 @@ export class CategoryFoodService {
       throw new BadRequestException(err.message);
     }
   };
-  getList = async (req: Request) => {
+  getMenu = async () => {
     try {
-      const isAuthenticated: boolean = await this.userService.checkAuthorized(req);
-      if (isAuthenticated) {
-        let items = await this.categoryFoodModel.find({});
-        return items;
-      } else {
-        throw new BadRequestException("NOT_AUTHENTICATED");
-      }
+      let items = await this.categoryFoodModel.find({ category_food_parent_id: null });
+      return items;
+    } catch (err: any) {
+      throw new BadRequestException(err.message);
+    }
+  };
+  getTag = async (menu: string) => {
+    try {
+      let menuParent: CategoryFoodType = await this.categoryFoodModel.findOne({ category_food_slug: menu });
+      let items = await this.categoryFoodModel.find({ category_food_parent_id: menuParent._id });
+      return items;
     } catch (err: any) {
       throw new BadRequestException(err.message);
     }

@@ -1,14 +1,15 @@
 "use client";
+import { useConfig } from "@/hooks";
+import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import styles from "@/scss/header.module.scss";
 import { CarOutlined, CloseOutlined, MenuOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
-import { redirect } from "next/navigation";
 import React from "react";
-import { useConfig } from "@/hooks";
 const Header = () => {
+  const router = useRouter();
+  const pathname = usePathname();
   const [isOpenMenu, setOpenMenu] = React.useState(false);
   const menuMobileRef = React.useRef<HTMLDivElement>(null);
   const headerRef = React.useRef<HTMLDivElement>(null);
@@ -56,7 +57,9 @@ const Header = () => {
   }, []);
   const handleLanguageChange = (locale: string) => () => {
     onChangeLocale(locale);
-    redirect(`/${locale}`);
+    router.push({ pathname });
+    router.replace(pathname, { locale });
+    console.log("pathname = ", pathname);
   };
   return (
     <React.Fragment>
@@ -77,7 +80,7 @@ const Header = () => {
             </Link>
           </li>
           <li className={styles.li}>
-            <Link href="/menu" className={clsx(["no-underline", "uppercase", "font-bold", "text-white"])}>
+            <Link href={{ pathname: "/menu" }} className={clsx(["no-underline", "uppercase", "font-bold", "text-white"])}>
               {t("menu")}
             </Link>
           </li>

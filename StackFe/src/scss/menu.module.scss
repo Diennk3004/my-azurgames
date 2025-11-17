@@ -1,5 +1,6 @@
 .wrapper {
   .colLeft {
+    flex-basis: calc(100vw - 24.75rem);
     .foodList {
       .foodNavbar {
         li {
@@ -14,6 +15,7 @@
     }
   }
   .colRight {
+    flex-basis: 24.75rem;
     .cartGrid {
       grid-template-columns: 2rem 2rem 11.875rem auto;
     }

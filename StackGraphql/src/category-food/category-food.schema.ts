@@ -12,6 +12,9 @@ class CategoryFood {
   category_food_name_vi: string;
 
   @Prop()
+  category_food_slug: string;
+
+  @Prop()
   category_food_image: string;
 
   @Prop()

@@ -8,18 +8,23 @@ import { CategoryFoodType } from "./types";
 export class CategoryFoodResolver {
   constructor(private readonly categoryFoodService: CategoryFoodService) {}
   @Mutation(() => CategoryFoodType)
-  createCategoryFood(@Args("createCategoryFoodInput") createCategoryFoodInput: CreateCategoryFoodInput, @Context("req") req: Request) {
+  createMenuFood(@Args("createCategoryFoodInput") createCategoryFoodInput: CreateCategoryFoodInput, @Context("req") req: Request) {
     return this.categoryFoodService.create(createCategoryFoodInput, req);
   }
 
   @Mutation(() => CategoryFoodType)
-  updateCategoryFood(@Args("createCategoryFoodInput") updateCategoryFoodInput: UpdateCategoryFoodInput, @Context("req") req: Request) {
+  updateMenuFood(@Args("updateCategoryFoodInput") updateCategoryFoodInput: UpdateCategoryFoodInput, @Context("req") req: Request) {
     return this.categoryFoodService.update(updateCategoryFoodInput, req);
   }
 
   @Query(() => [CategoryFoodType])
-  getCategoryFoodList(@Context("req") req: Request) {
-    return this.categoryFoodService.getList(req);
+  menuList() {
+    return this.categoryFoodService.getMenu();
+  }
+
+  @Query(() => [CategoryFoodType])
+  tagList(@Args("menu") menu: string) {
+    return this.categoryFoodService.getTag(menu);
   }
 
   @Mutation(() => [CategoryFoodType])

@@ -11,6 +11,9 @@ class CategoryFoodType {
   category_food_name_vi: string;
 
   @Field(() => String, { nullable: true })
+  category_food_slug: string;
+
+  @Field(() => String, { nullable: true })
   category_food_image: string;
 
   @Field(() => String, { nullable: true })

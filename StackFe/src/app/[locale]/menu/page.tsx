@@ -1,13 +1,17 @@
 "use client";
 import styles from "@/scss/menu.module.scss";
 import stylesModalDialog from "@/scss/modal-dialog.module.scss";
-import { Colors } from "@/utils";
+import { Colors, getUriImage } from "@/utils";
 import { CloseOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
+import { useLazyQuery } from "@apollo/client";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import React from "react";
+import { GET_MENU_FOOD, GET_MENU_TAG } from "@/graphql-client";
+import { useConfig } from "@/hooks";
+import { useSearchParams } from "next/navigation";
 type IFood = {
   title: string;
   img: string;
@@ -20,8 +24,15 @@ type ICart = {
   title: string;
   img: string;
 };
+type IMenu = {
+  _id: string;
+  category_food_name_en: string;
+  category_food_name_vi: string;
+  category_food_slug: string;
+  category_food_image: string;
+  category_food_parent_id: string;
+};
 const Menu = () => {
-  const menuList: string[] = ["Daily Promotions", "Pizza", "Pizza Muffin", "Chicken", "Pasta", "Appetizer", "Dessert", "Drinks"];
   const foodList: IFood[] = [
     { title: "All", img: "" },
     { title: "Seafood", img: "fried-shrimp.png" },
@@ -54,12 +65,19 @@ const Menu = () => {
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" }
   ];
+  const searchParams = useSearchParams();
   const addressBarRef = React.useRef<HTMLDivElement>(null);
   const menuBarRef = React.useRef<HTMLDivElement>(null);
   const modalRef = React.useRef<HTMLDivElement>(null);
   const dialogRef = React.useRef<HTMLDivElement>(null);
+  const { locale } = useConfig();
+  const [menuList, setMenuList] = React.useState<IMenu[]>([]);
+  const [tagList, setTagList] = React.useState<IMenu[]>([]);
   const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
   const [remainedBarHeight, setRemainedBarHeight] = React.useState<number>(0);
+  const [getMenuList] = useLazyQuery(GET_MENU_FOOD, { fetchPolicy: "network-only" });
+  const [getTagList] = useLazyQuery(GET_MENU_TAG, { fetchPolicy: "network-only" });
+
   React.useEffect(() => {
     const getHeight = async () => {
       if (addressBarRef && menuBarRef && addressBarRef.current && menuBarRef.current) {
@@ -75,8 +93,33 @@ const Menu = () => {
         }
       }
     };
+    const getMenu = () => {
+      getMenuList()
+        .then((response: any) => {
+          if (response.data && response.data.menuList) {
+            setMenuList(response.data.menuList);
+          }
+        })
+        .catch(() => {});
+    };
     getHeight();
+    getMenu();
   }, []);
+  React.useEffect(() => {
+    const getTag = () => {
+      const menu = searchParams.get("menu");
+      if (menu) {
+        getTagList({ variables: { menu } })
+          .then((response: any) => {
+            if (response.data && response.data.tagList) {
+              setTagList(response.data.tagList);
+            }
+          })
+          .catch(() => {});
+      }
+    };
+    getTag();
+  }, [searchParams.get("menu")]);
   const handleOpenModal = (val: boolean) => () => {
     setOpenModal(val);
     if (modalRef && dialogRef && modalRef.current && dialogRef.current) {
@@ -95,25 +138,23 @@ const Menu = () => {
       }
     }
   };
+  console.log("tagList = ", tagList);
   return (
     <React.Fragment>
       <div className={clsx(["lg:flex", "flex-row", "justify-between", styles.wrapper])}>
-        <div className={clsx(["pb-3", "bg-gray-100", "lg:w-[75%]", styles.colLeft])}>
+        <div className={clsx(["pb-3", "bg-gray-100", styles.colLeft])}>
           <div className={clsx([styles.addressBar, "justify-center", "pt-2", "pb-2", "flex", "pl-3", "pr-3", "bg-sky-100"])} ref={addressBarRef}>
             <div className={clsx([styles.addressContainer, "lg:w-[80%]", "flex", "items-center", "pt-1", "pb-1", "font-bold", "text-gray-500"])}>Bạn Đang Chọn: Giao Hàng Tận NơiTrần Quang Diệu,phường 14,Quận 3,Hồ Chí Minh,Việt Nam</div>
           </div>
           <div className={clsx([styles.menuFoodBar, "pt-0", "pb-0", "pl-3", "pr-3", "flex", "justify-center", "bg-white", "shadow-b"])} style={{ boxShadow: "0px 1px 0px 0px #dcdcdc" }} ref={menuBarRef}>
             {menuList.length > 0 && (
               <ul className={clsx([styles.menuContainer, "lg:w-[73%]", "flex", "max-md:gap-x-4", "justify-between", "overflow-y-hidden", "overflow-x-scroll", "slider-container"])}>
-                {menuList.map((item: string, idx: number) => {
-                  let active: boolean = false;
-                  if (item === "Pizza") {
-                    active = true;
-                  }
+                {menuList.map((item: IMenu, idx: number) => {
+                  const active: boolean = false;
                   return (
                     <li key={`menu-item-${idx}`}>
-                      <Link href="/" className={clsx([active === true && "border-b-2", "max-md:text-sm", active === true && "border-red-400", "pb-2", "pt-2", "block", "font-bold"])}>
-                        {item}
+                      <Link href={{ pathname: "/menu", query: { menu: item.category_food_slug } }} className={clsx([active && "border-b-2", "max-md:text-sm", active && "border-red-400", "pb-2", "pt-2", "block", "font-bold"])}>
+                        {locale === "en" ? item.category_food_name_en : item.category_food_name_vi}
                       </Link>
                     </li>
                   );
@@ -123,14 +164,14 @@ const Menu = () => {
           </div>
           <div className={clsx(["overflow-x-hidden", "overflow-y-scroll", "max-lg:pl-5", "max-lg:pr-5"])} style={{ height: `${remainedBarHeight}px` }}>
             <div className={clsx([styles.foodList, "flex", "justify-center", "mt-5"])}>
-              {foodList.length > 0 && (
+              {tagList.length > 0 && (
                 <ul className={clsx([styles.foodNavbar, "lg:w-[75%]", "flex", "justify-start", "gap-y-3", "gap-x-3", "flex-wrap"])}>
-                  {foodList.map((item: IFood, idx: number) => {
+                  {tagList.map((item: IMenu, idx: number) => {
                     return (
                       <li key={`food-item-${idx}`}>
-                        <Link href="/" className={clsx(["flex", "bg-white", "flex-row", "justify-between", "gap-x-2", "items-center", "pl-3", "pr-3", "pt-1.75", "pb-1.75", "text-sm", "font-bold", "rounded-md", "border", "border-gray-200", "border", "border-gray-200", "hover:bg-gray-100", item.title === "All" && styles.active])}>
-                          {item.img && <Image src={`/${item.img}`} alt="Dominos" width={160} height={160} className={clsx(["w-5"])} />}
-                          <span>{item.title}</span>
+                        <Link href={{ pathname: "/menu", query: { menu: "", tag: item.category_food_slug } }} className={clsx(["flex", "bg-white", "flex-row", "justify-between", "gap-x-2", "items-center", "pl-3", "pr-3", "pt-1.75", "pb-1.75", "text-sm", "font-bold", "rounded-md", "border", "border-gray-200", "border", "border-gray-200", "hover:bg-gray-100", false && styles.active])}>
+                          {item.category_food_image && <Image src={getUriImage(item.category_food_image)} alt="Dominos" width={160} height={160} className={clsx(["w-5"])} />}
+                          <span>{locale === "en" ? item.category_food_name_en : item.category_food_name_vi}</span>
                         </Link>
                       </li>
                     );
@@ -138,7 +179,7 @@ const Menu = () => {
                 </ul>
               )}
             </div>
-            <div className={clsx([styles.cakeBlock, "lg:w-[87%]", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
+            <div className={clsx([styles.cakeBlock, "lg:w-full", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
               <h3 className={clsx(["uppercase", "text-2xl", "font-bold"])}>Super Topping</h3>
               {cakeList.length > 0 && (
                 <div className={clsx(["grid", "lg:grid-cols-4", "sm:grid-cols-2", "gap-x-8", "gap-y-5", "mt-8", styles.cakeList])}>
@@ -160,7 +201,7 @@ const Menu = () => {
                 </div>
               )}
             </div>
-            <div className={clsx([styles.cakeBlock, "lg:w-[87%]", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
+            <div className={clsx([styles.cakeBlock, "lg:w-full", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
               <h3 className={clsx(["uppercase", "text-2xl", "font-bold"])}>Seafood Cravers</h3>
               {cakeList.length > 0 && (
                 <div className={clsx(["grid", "lg:grid-cols-4", "sm:grid-cols-2", "gap-x-8", "gap-y-5", "mt-8", styles.cakeList])}>
@@ -184,7 +225,7 @@ const Menu = () => {
             </div>
           </div>
         </div>
-        <div className={clsx(["pl-4", "pr-4", "pt-4", "pb-4", "relative", "border-l", "border-gray-200", "lg:w-[25%]", styles.colRight])}>
+        <div className={clsx(["pl-4", "pr-4", "pt-4", "pb-4", "relative", "border-l", "border-gray-200", styles.colRight])}>
           {cart.length > 0 ? (
             <React.Fragment>
               <div className={clsx(["flex", "justify-between"])}>

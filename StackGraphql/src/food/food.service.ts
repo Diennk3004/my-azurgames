@@ -95,9 +95,7 @@ export class FoodService {
       if (menu_slug && tag_slug) {
         let category_food_id: string = "";
         let menuList: CategoryFood[] = await this.categoryFoodServices.getTag(menu_slug);
-
         let menuData: CategoryFood = menuList.find((item) => item.category_food_slug === tag_slug);
-        console.log("menuData = ", menuData);
         if (menuData) {
           category_food_id = menuData._id;
           let where1 = { category_food_id };

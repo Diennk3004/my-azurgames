@@ -4,7 +4,7 @@ import { useConfig } from "@/hooks";
 import { Link } from "@/i18n/navigation";
 import styles from "@/scss/menu.module.scss";
 import stylesModalDialog from "@/scss/modal-dialog.module.scss";
-import { Colors, getUriImage } from "@/utils";
+import { Colors, formatCurrency, getUriImage } from "@/utils";
 import { CloseOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { useLazyQuery } from "@apollo/client";
 import clsx from "clsx";
@@ -26,6 +26,15 @@ type IMenu = {
   category_food_slug: string;
   category_food_image: string;
   category_food_parent_id: string;
+};
+type IFood = {
+  _id: string;
+  food_name_en: string;
+  food_name_vi: string;
+  featured_image: string;
+  category_food_id: string;
+  price: number;
+  size: number;
 };
 type Props = {
   params: Promise<{ slug: string }>;
@@ -64,6 +73,7 @@ const Menu: React.FC<Props> = ({ params }) => {
   const [tagList, setTagList] = React.useState<IMenu[]>([]);
   const [menuSlug, setMenuSlug] = React.useState<string>("");
   const [tagSlug, setTagSlug] = React.useState<string>("");
+  const [foodData, setFoodData] = React.useState<IFood[]>([]);
   const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
   const [remainedBarHeight, setRemainedBarHeight] = React.useState<number>(0);
   const [getMenuList] = useLazyQuery(GET_MENU_FOOD, { fetchPolicy: "network-only" });
@@ -130,7 +140,11 @@ const Menu: React.FC<Props> = ({ params }) => {
   React.useEffect(() => {
     if (menuSlug && tagSlug) {
       getFood({ variables: { menu_slug: menuSlug, tag_slug: tagSlug } })
-        .then((response: any) => {})
+        .then((response: any) => {
+          if (response && response.data && response.data.foodList) {
+            setFoodData(response.data.foodList);
+          }
+        })
         .catch(() => {});
     }
   }, [menuSlug, tagSlug]);
@@ -192,29 +206,31 @@ const Menu: React.FC<Props> = ({ params }) => {
                 </ul>
               )}
             </div>
-            <div className={clsx([styles.cakeBlock, "lg:w-full", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
+            <div className={clsx([styles.cakeBlock, "lg:w-full", "flex", "flex-col", "items-center", "mt-10", "mx-auto", "pl-3", "pr-3"])}>
               <h3 className={clsx(["uppercase", "text-2xl", "font-bold"])}>Super Topping</h3>
-              {cakeList.length > 0 && (
+              {foodData.length > 0 && (
                 <div className={clsx(["grid", "lg:grid-cols-4", "sm:grid-cols-2", "gap-x-8", "gap-y-5", "mt-8", styles.cakeList])}>
-                  {cakeList.map((item: ICake, idx: number) => {
+                  {foodData.map((item: IFood, idx: number) => {
                     return (
                       <div key={`cake-item-${idx}`} className={clsx(["bg-white", "rounded-md", "border", "border-gray-200", "pb-4"])}>
-                        <Link href="/menu/pizza/beef">
-                          <Image src={`/${item.img}`} alt="Dominos" width={2000} height={1334} className={clsx(["w-full", "h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
-                        </Link>
-                        <h3 className={clsx(["text-center", "mt-3", "font-bold"])}>
-                          <Link style={{ color: Colors.blue }} href="/menu/pizza/beef">
-                            Ocean Mania
-                          </Link>
+                        <button onClick={handleOpenModal(true)} className={clsx(["w-full"])}>
+                          <Image src={getUriImage(item.featured_image)} alt="Dominos" width={2000} height={1334} className={clsx(["w-full", "h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
+                        </button>
+                        <h3 className={clsx(["text-center", "mt-3", "pl-2", "pr-2", "font-bold"])}>
+                          <button style={{ color: Colors.blue }} onClick={handleOpenModal(true)}>
+                            {locale === "en" ? item.food_name_en : item.food_name_vi}
+                          </button>
                         </h3>
-                        <div className={clsx(["text-center", "mt-3", "font-bold"])}>9 inch - 205,000 đ</div>
+                        <div className={clsx(["text-center", "mt-3", "font-bold"])}>
+                          {item.size} inch - {formatCurrency(item.price)}
+                        </div>
                       </div>
                     );
                   })}
                 </div>
               )}
             </div>
-            <div className={clsx([styles.cakeBlock, "lg:w-full", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
+            {/* <div className={clsx([styles.cakeBlock, "lg:w-full", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
               <h3 className={clsx(["uppercase", "text-2xl", "font-bold"])}>Seafood Cravers</h3>
               {cakeList.length > 0 && (
                 <div className={clsx(["grid", "lg:grid-cols-4", "sm:grid-cols-2", "gap-x-8", "gap-y-5", "mt-8", styles.cakeList])}>
@@ -235,7 +251,7 @@ const Menu: React.FC<Props> = ({ params }) => {
                   })}
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
         <div className={clsx(["pl-4", "pr-4", "pt-4", "pb-4", "relative", "border-l", "border-gray-200", styles.colRight])}>

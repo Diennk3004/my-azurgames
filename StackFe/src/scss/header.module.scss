@@ -52,7 +52,7 @@
       .user {
         display: flex;
         align-items: center;
-        a {
+        button {
           color: #fff;
           font-size: 2rem;
           @media screen and (max-width: 992px) {
@@ -112,4 +112,9 @@
       }
     }
   }
+}
+.headerLoginDialog {
+  max-width: 800px;
+  height: calc(100vh / 4);
+  margin-top: calc(-100vh / 1.5 / 2);
 }

@@ -2,6 +2,7 @@
 import { useConfig } from "@/hooks";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import styles from "@/scss/header.module.scss";
+import stylesModalDialog from "@/scss/modal-dialog.module.scss";
 import { CarOutlined, CloseOutlined, MenuOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
@@ -13,7 +14,10 @@ const Header = () => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isOpenMenu, setOpenMenu] = React.useState(false);
+  const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
   const menuMobileRef = React.useRef<HTMLDivElement>(null);
+  const modalRef = React.useRef<HTMLDivElement>(null);
+  const dialogRef = React.useRef<HTMLDivElement>(null);
   const headerRef = React.useRef<HTMLDivElement>(null);
   const t = useTranslations("page_translate");
   const { onChangeLocale } = useConfig();
@@ -33,14 +37,16 @@ const Header = () => {
     let headerHeight: number = 0;
     if (menuMobileRef && headerRef && menuMobileRef.current && headerRef.current) {
       headerHeight = headerRef.current.clientHeight;
-      const windowHeight: number = window.innerHeight;
-      const menuMobileHeight: number = windowHeight - headerHeight;
+      const menuMobileHeight: number = window.innerHeight - headerHeight;
       menuMobileRef.current.style.top = `${headerHeight}px`;
       menuMobileRef.current.style.height = `${menuMobileHeight}px`;
-      localStorage.setItem("heightWithoutHeader", menuMobileHeight.toString());
+      localStorage.setItem("headerHeight", headerHeight.toString());
     }
+  }, [window.innerHeight]);
+  React.useEffect(() => {
     window.onscroll = function () {
       if (headerRef && headerRef.current) {
+        const headerHeight = headerRef.current.clientHeight;
         const scrollTop: number = window.scrollY;
         const headerWidth: number = headerRef.current.clientWidth;
         if (scrollTop > headerHeight) {
@@ -61,6 +67,24 @@ const Header = () => {
     onChangeLocale(locale);
     router.replace(pathname, { locale });
   };
+  const handleOpenModal = (val: boolean) => () => {
+    setOpenModal(val);
+    if (modalRef && dialogRef && modalRef.current && dialogRef.current) {
+      if (isOpenModal === true) {
+        modalRef.current.style.display = "hidden";
+        modalRef.current.style.opacity = "0";
+        modalRef.current.style.zIndex = "-1";
+        dialogRef.current.style.transform = "translateY(-100%)";
+        dialogRef.current.style.opacity = "0";
+      } else {
+        modalRef.current.style.display = "block";
+        modalRef.current.style.opacity = "1";
+        modalRef.current.style.zIndex = "1";
+        dialogRef.current.style.transform = "translateY(0)";
+        dialogRef.current.style.opacity = "1";
+      }
+    }
+  };
   return (
     <React.Fragment>
       <header className={clsx(["flex", "items-center", "justify-between", "pl-4", "pr-4", "pt-4", "pb-4", styles.nav_header])} ref={headerRef}>
@@ -80,7 +104,7 @@ const Header = () => {
             </Link>
           </li>
           <li className={styles.li}>
-            <Link href={{ pathname: "/menu" }} className={clsx(["no-underline", "uppercase", "font-bold", "text-white"])}>
+            <Link href={{ pathname: "/menu/pizza/seafood" }} className={clsx(["no-underline", "uppercase", "font-bold", "text-white"])}>
               {t("menu")}
             </Link>
           </li>
@@ -119,10 +143,10 @@ const Header = () => {
             <Link href="/" className={styles.promotion}>
               <Image src="/menu.svg" width={30} height={30} alt="Dominos" />
             </Link>
-            <div className={styles.user}>
-              <Link href="/">
+            <div className={clsx(["flex", "items-center"])}>
+              <button onClick={handleOpenModal(true)} className={clsx(["text-white", "text-3xl", "max-lg:text-2xl"])}>
                 <UserOutlined />
-              </Link>
+              </button>
             </div>
           </div>
           <Link href="/" className={clsx(["relative", "text-white", styles.cartShopping])}>
@@ -204,6 +228,10 @@ const Header = () => {
             </div>
           </li>
         </ul>
+      </div>
+      <div className={clsx(["fixed", "top-0", "left-0", "w-screen", "h-screen", stylesModalDialog.modal])} ref={modalRef}>
+        <div className={clsx(["absolute", "top-0", "left-0", "w-screen", "h-screen", "bg-gray-950", "opacity-50"])} onClick={handleOpenModal(false)}></div>
+        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "max-lg:justify-start", "ml-auto", "mr-auto", "max-md:ml-5", "max-md:mr-5", "top-[50%]", stylesModalDialog.dialog, styles.headerLoginDialog])} ref={dialogRef}></div>
       </div>
     </React.Fragment>
   );

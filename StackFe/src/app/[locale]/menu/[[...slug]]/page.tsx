@@ -40,16 +40,6 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 const Menu: React.FC<Props> = ({ params }) => {
-  const cakeList: ICake[] = [
-    { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
-    { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
-    { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
-    { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
-    { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
-    { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
-    { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" }
-  ];
-  const t = useTranslations("page_translate");
   const cart: ICart[] = [
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
@@ -64,6 +54,7 @@ const Menu: React.FC<Props> = ({ params }) => {
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" },
     { title: "Super Topping Pizzamin Sea", img: "musttry.jpg" }
   ];
+  const t = useTranslations("page_translate");
   const addressBarRef = React.useRef<HTMLDivElement>(null);
   const menuBarRef = React.useRef<HTMLDivElement>(null);
   const modalRef = React.useRef<HTMLDivElement>(null);
@@ -80,20 +71,23 @@ const Menu: React.FC<Props> = ({ params }) => {
   const [getTagList] = useLazyQuery(GET_MENU_TAG, { fetchPolicy: "network-only" });
   const [getFood] = useLazyQuery(GET_FOOD, { fetchPolicy: "network-only" });
   React.useEffect(() => {
-    const getHeight = async () => {
-      if (addressBarRef && menuBarRef && addressBarRef.current && menuBarRef.current) {
-        if (localStorage.getItem("heightWithoutHeader")) {
-          const heightWithoutHeader: string | null = localStorage.getItem("heightWithoutHeader");
-          const addressBarHeight: number = addressBarRef.current.clientHeight;
-          const menuBarHeight: number = menuBarRef.current.clientHeight;
-          const totalBarHeight: number = addressBarHeight + menuBarHeight;
-          if (heightWithoutHeader) {
-            const blockHeight: number = parseFloat(heightWithoutHeader) - totalBarHeight - 20;
-            setRemainedBarHeight(blockHeight);
-          }
+    if (addressBarRef && menuBarRef && addressBarRef.current && menuBarRef.current) {
+      const addressBarHeight: number = addressBarRef.current.clientHeight;
+      const menuBarHeight: number = menuBarRef.current.clientHeight;
+      let headerHeight: string | null = "";
+      if (localStorage.getItem("headerHeight")) {
+        headerHeight = localStorage.getItem("headerHeight");
+        if (headerHeight) {
+          console.log("headerHeight = ", headerHeight);
+          console.log("addressBarHeight = ", addressBarHeight);
+          console.log("menuBarHeight = ", menuBarHeight);
+          const blockHeight: number = window.innerHeight - (parseFloat(headerHeight) + addressBarHeight + menuBarHeight);
+          setRemainedBarHeight(blockHeight);
         }
       }
-    };
+    }
+  }, [window.innerHeight]);
+  React.useEffect(() => {
     const getMenu = () => {
       getMenuList()
         .then((response: any) => {
@@ -103,7 +97,6 @@ const Menu: React.FC<Props> = ({ params }) => {
         })
         .catch(() => {});
     };
-    getHeight();
     getMenu();
     params.then((response: any) => {
       const { slug } = response;
@@ -171,11 +164,11 @@ const Menu: React.FC<Props> = ({ params }) => {
       <div className={clsx(["lg:flex", "flex-row", "justify-between", styles.wrapper])}>
         <div className={clsx(["pb-3", "bg-gray-100", styles.colLeft])}>
           <div className={clsx([styles.addressBar, "justify-center", "pt-2", "pb-2", "flex", "pl-3", "pr-3", "bg-sky-100"])} ref={addressBarRef}>
-            <div className={clsx([styles.addressContainer, "lg:w-[80%]", "flex", "items-center", "pt-1", "pb-1", "font-bold", "text-gray-500"])}>Bạn Đang Chọn: Giao Hàng Tận NơiTrần Quang Diệu,phường 14,Quận 3,Hồ Chí Minh,Việt Nam</div>
+            <div className={clsx([styles.addressContainer, "w-[80%]", "max-lg:w-full", "flex", "items-center", "pt-1", "pb-1", "font-bold", "text-gray-500"])}>Bạn Đang Chọn: Giao Hàng Tận NơiTrần Quang Diệu,phường 14,Quận 3,Hồ Chí Minh,Việt Nam</div>
           </div>
           <div className={clsx([styles.menuFoodBar, "pt-0", "pb-0", "pl-3", "pr-3", "flex", "justify-center", "bg-white", "shadow-b"])} style={{ boxShadow: "0px 1px 0px 0px #dcdcdc" }} ref={menuBarRef}>
             {menuList.length > 0 && (
-              <ul className={clsx([styles.menuContainer, "lg:w-[73%]", "flex", "max-md:gap-x-4", "justify-between", "overflow-y-hidden", "overflow-x-scroll", "slider-container"])}>
+              <ul className={clsx([styles.menuContainer, "w-[73%]", "max-lg:w-full", "flex", "max-md:gap-x-4", "justify-between", "overflow-y-hidden", "overflow-x-scroll", "slider-container"])}>
                 {menuList.map((item: IMenu, idx: number) => {
                   const active: boolean = false;
                   return (
@@ -189,10 +182,10 @@ const Menu: React.FC<Props> = ({ params }) => {
               </ul>
             )}
           </div>
-          <div className={clsx(["overflow-x-hidden", "overflow-y-scroll", "max-lg:pl-5", "max-lg:pr-5"])} style={{ height: `${remainedBarHeight}px` }}>
+          <div className={clsx(["overflow-x-hidden", "overflow-y-scroll", "pl-5", "pr-5"])} style={{ height: `${remainedBarHeight}px` }}>
             <div className={clsx([styles.foodList, "flex", "justify-center", "mt-5"])}>
               {tagList.length > 0 && (
-                <ul className={clsx([styles.foodNavbar, "lg:w-[75%]", "flex", "justify-start", "gap-y-3", "gap-x-3", "flex-wrap"])}>
+                <ul className={clsx([styles.foodNavbar, "w-[75%]", "max-lg:w-full", "flex", "justify-start", "gap-y-3", "gap-x-3", "flex-wrap"])}>
                   {tagList.map((item: IMenu, idx: number) => {
                     return (
                       <li key={`food-item-${idx}`}>
@@ -206,10 +199,10 @@ const Menu: React.FC<Props> = ({ params }) => {
                 </ul>
               )}
             </div>
-            <div className={clsx([styles.cakeBlock, "lg:w-full", "flex", "flex-col", "items-center", "mt-10", "mx-auto", "pl-3", "pr-3"])}>
+            <div className={clsx([styles.cakeBlock, "w-full", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
               <h3 className={clsx(["uppercase", "text-2xl", "font-bold"])}>Super Topping</h3>
               {foodData.length > 0 && (
-                <div className={clsx(["grid", "lg:grid-cols-4", "sm:grid-cols-2", "gap-x-8", "gap-y-5", "mt-8", styles.cakeList])}>
+                <div className={clsx(["grid", "grid-cols-4", "max-lg:grid-cols-2", "max-sm:grid-cols-1", "gap-x-8", "gap-y-5", "mt-8", styles.cakeList])}>
                   {foodData.map((item: IFood, idx: number) => {
                     return (
                       <div key={`cake-item-${idx}`} className={clsx(["bg-white", "rounded-md", "border", "border-gray-200", "pb-4"])}>
@@ -320,33 +313,32 @@ const Menu: React.FC<Props> = ({ params }) => {
       </div>
       <div className={clsx(["fixed", "top-0", "left-0", "w-screen", "h-screen", stylesModalDialog.modal])} ref={modalRef}>
         <div className={clsx(["absolute", "top-0", "left-0", "w-screen", "h-screen", "bg-gray-950", "opacity-50"])} onClick={handleOpenModal(false)}></div>
-        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "ml-auto", "mr-auto", "mt-20", "w-[800px]", "h-[700px]", "max-lg:w-[400px]", "max-lg:h-full", "max-lg:mt-20", "max-lg:mb-20", stylesModalDialog.dialog])} ref={dialogRef}>
-          <div className={clsx(["lg:w-[45%]", "max-lg:h-[200px]", "relative"])}>
-            <Image src="/Pizzaminsea.jpg" alt="Dominos" width={832} height={1440} className={clsx(["object-cover", "rounded-tl-lg", "lg:rounded-bl-lg", "max-lg:rounded-tr-lg", "h-full"])} />
+        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "max-lg:justify-start", "ml-auto", "mr-auto", "max-md:ml-5", "max-md:mr-5", "top-[50%]", stylesModalDialog.dialog, styles.menuDialog])} ref={dialogRef}>
+          <div className={clsx(["w-[45%]", "max-lg:w-full", "max-lg:h-50", "relative"])}>
+            <Image src="/Pizzaminsea.jpg" alt="Dominos" width={832} height={1440} className={clsx(["object-cover", "rounded-tl-lg", "lg:rounded-bl-lg", "max-lg:rounded-tr-lg", "w-full", "h-full"])} />
             <div className={clsx(["absolute", "lg:hidden", "top-0", "right-0", "bg-orange-700", "text-white", "rounded-tr-lg", "flex", "justify-center", "items-center", "w-10", "h-10"])}>
               <CloseOutlined onClick={handleOpenModal(false)} />
             </div>
           </div>
-          <div className={clsx(["lg:w-[65%]", "relative"])}>
+          <div className={clsx(["w-[65%]", "max-lg:w-full", "relative", "max-lg:grow"])}>
             <div className={clsx(["absolute", "max-lg:hidden", "top-0", "right-0", "bg-orange-700", "text-white", "rounded-tr-lg", "flex", "justify-center", "items-center", "w-10", "h-10"])}>
               <CloseOutlined onClick={handleOpenModal(false)} />
             </div>
             <div className={clsx(["pt-2", "pl-8", "pr-10"])}>
-              <div className={clsx("overflow-x-hidden", "overflow-y-scroll", "h-[600px]", "max-lg:h-[420px]")}>
+              <div className={clsx("overflow-x-hidden", "overflow-y-scroll", "h-150", "max-lg:h-105")}>
                 <h3 className={clsx(["font-bold", "text-2xl", "text-cyan-700"])}>Pizza Siêu Topping Hải Sản Nhiệt Đới Xốt Tiêu - Super Topping Pizzamin Sea</h3>
                 <div className={clsx(["mt-6", "text-gray-500", "font-bold", "text-sm"])}>Extra protein toppings by 50%: Shrimp, Squid; Extra Mozzarella Cheese, Cheddar Cheese, Pineapple, Onion, Mayonnaise, Black Pepper Sauce</div>
-                <div className={clsx(["mt-10", "mb-10", "border-t-2", "border-gray-400", "w-[70px]"])}></div>
+                <div className={clsx(["mt-10", "mb-10", "border-t-2", "border-gray-400", "w-17.5"])}></div>
                 <div>
                   <div className={clsx(["pl-3", "font-bold"])}>Crust</div>
                   <div className={clsx(["pl-6", "mt-3"])}>
                     {Array.from({ length: 3 }).map((val, idx: number) => {
                       return (
-                        <div key={`item-${idx}`} className={clsx(["flex", "justify-start", "items-center", "gap-x-3", "border-b", "border-gray-200", "pt-3", "pb-3"])}>
-                          <div className={clsx(["relative", "w-7", styles.blockRadio])}>
+                        <div key={`item-${idx}`} className={clsx(["flex", "justify-between", "items-center", "gap-x-3", "border-b", "border-gray-200", "pt-3", "pb-3"])}>
+                          <div className={clsx(["relative", styles.blockRadio])}>
                             <input type="radio" name="topping" value={`Fresh-${idx}`} className={clsx(["absolute", "z-2", "opacity-0"])} />
-                            <div className={clsx([styles.mask])}></div>
+                            <div className={clsx(["font-bold", "ml-10", "mr-10", "max-sm:text-xs", styles.mask])}>Fresh Hand-tossed Crust</div>
                           </div>
-                          <div className={clsx(["font-bold", "w-[320px]"])}>Fresh Hand-tossed Crust</div>
                           <Image src="/pizza-base.png" width={40} height={40} className={clsx(["w-6", "h-6"])} alt="Dominos" />
                         </div>
                       );
@@ -358,12 +350,11 @@ const Menu: React.FC<Props> = ({ params }) => {
                   <div className={clsx(["pl-6", "mt-3"])}>
                     {Array.from({ length: 3 }).map((val, idx: number) => {
                       return (
-                        <div key={`item-${idx}`} className={clsx(["flex", "justify-start", "items-center", "gap-x-3", "border-b", "border-gray-200", "pt-3", "pb-3"])}>
-                          <div className={clsx(["relative", "w-7", styles.blockRadio])}>
+                        <div key={`item-${idx}`} className={clsx(["flex", "justify-between", "items-center", "gap-x-3", "border-b", "border-gray-200", "pt-3", "pb-3"])}>
+                          <div className={clsx(["relative", styles.blockRadio])}>
                             <input type="radio" name="size" value={`Fresh-${idx}`} className={clsx(["absolute", "z-2", "opacity-0"])} />
-                            <div className={clsx([styles.mask])}></div>
+                            <div className={clsx(["font-bold", "ml-10", "mr-10", "max-sm:text-xs", styles.mask])}>Size 9 inch = 235,000₫</div>
                           </div>
-                          <div className={clsx(["font-bold", "w-[320px]"])}>Size 9 inch = 235,000₫</div>
                           <Image src="/pizza-size.png" width={40} height={40} alt="Dominos" className={clsx(["w-6", "h-6"])} />
                         </div>
                       );
@@ -374,17 +365,17 @@ const Menu: React.FC<Props> = ({ params }) => {
             </div>
             <div style={{ borderTopWidth: 1, borderTopColor: "var(--color-gray-200)", boxShadow: "rgb(196 196 196 / 53%) 0px 0px 10px 0px" }} className={clsx(["p-3", "gap-x-1", "absolute", "w-full", "bottom-0", "flex", "justify-between", "items-center"])}>
               <div className={clsx(["flex"])}>
-                <button className={clsx(["bg-gray-200", "rounded-tl-sm", "rounded-bl-sm", "outline-0", "border-0", "pl-4", "pr-4", "w-[50px]", "h-[50px]"])}>
+                <button className={clsx(["bg-gray-200", "rounded-tl-sm", "rounded-bl-sm", "outline-0", "border-0", "pl-4", "pr-4", "w-12.5", "h-12.5"])}>
                   <MinusOutlined />
                 </button>
-                <input type="text" value={1} className={clsx(["w-[50px]", "text-center", "bg-gray-200", "outline-0", "border-l-gray-300", "border-r-gray-300", "border-l", "border-r"])} readOnly={true} />
+                <input type="text" value={1} className={clsx(["w-12.5", "text-center", "bg-gray-200", "outline-0", "border-l-gray-300", "border-r-gray-300", "border-l", "border-r"])} readOnly={true} />
                 <button className={clsx(["bg-gray-200", "rounded-tr-sm", "rounded-br-sm", "outline-0", "border-0", "pl-4", "pr-4"])}>
                   <PlusOutlined />
                 </button>
               </div>
-              <button className={clsx(["bg-red-600", "flex", "justify-center", "items-center", "text-white", "font-bold", "gap-x-2", "pt-3", "pb-3", "pl-10", "pr-10", "rounded-sm"])}>
-                <span className={clsx(["uppercase"])}>Add to cart</span>
-                <span>245,000đ</span>
+              <button className={clsx(["bg-red-600", "flex", "justify-center", "items-center", "text-white", "font-bold", "gap-x-2", "max-sm:gap-x-1", "pt-3", "pb-3", "pl-10", "pr-10", "max-sm:pl-3", "max-sm:pr-3", "rounded-sm"])}>
+                <span className={clsx(["uppercase", "max-sm:text-sm"])}>Add to cart</span>
+                <span className={clsx(["max-sm:text-sm"])}>245,000đ</span>
               </button>
             </div>
           </div>

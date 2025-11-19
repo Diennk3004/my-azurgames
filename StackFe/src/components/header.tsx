@@ -7,14 +7,15 @@ import { CarOutlined, CloseOutlined, MenuOutlined, ShoppingCartOutlined, UserOut
 import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
 import React from "react";
+import { SignIn } from "./SignIn";
+import { SignUp } from "./SignUp";
 const Header = () => {
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [isOpenMenu, setOpenMenu] = React.useState(false);
   const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
+  const [isTabSignIn, setTabSignIn] = React.useState<boolean>(true);
   const menuMobileRef = React.useRef<HTMLDivElement>(null);
   const modalRef = React.useRef<HTMLDivElement>(null);
   const dialogRef = React.useRef<HTMLDivElement>(null);
@@ -84,6 +85,9 @@ const Header = () => {
         dialogRef.current.style.opacity = "1";
       }
     }
+  };
+  const handleChangeTab = (val: boolean) => () => {
+    setTabSignIn(val);
   };
   return (
     <React.Fragment>
@@ -231,7 +235,31 @@ const Header = () => {
       </div>
       <div className={clsx(["fixed", "top-0", "left-0", "w-screen", "h-screen", stylesModalDialog.modal])} ref={modalRef}>
         <div className={clsx(["absolute", "top-0", "left-0", "w-screen", "h-screen", "bg-gray-950", "opacity-50"])} onClick={handleOpenModal(false)}></div>
-        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "max-lg:justify-start", "ml-auto", "mr-auto", "max-md:ml-5", "max-md:mr-5", "top-[50%]", stylesModalDialog.dialog, styles.headerLoginDialog])} ref={dialogRef}></div>
+        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "max-lg:justify-start", "ml-auto", "mr-auto", "max-md:ml-5", "max-md:mr-5", "top-[50%]", "max-w-200", stylesModalDialog.dialog, styles.signUpSignInDialog, isTabSignIn === true && styles.signInActive])} ref={dialogRef}>
+          <div className={clsx(["absolute", "max-lg:hidden", "top-0", "right-0", "bg-orange-700", "text-white", "rounded-tr-lg", "flex", "justify-center", "items-center", "w-10", "h-10"])}>
+            <CloseOutlined onClick={handleOpenModal(false)} />
+          </div>
+          <div className={clsx(["flex", "flex-row", "w-full"])}>
+            <div className={clsx(["w-80", "flex"])}>
+              <Image src="/modal-signin-signup.png" width={876} height={1250} alt="Dominos" className={clsx(["object-cover", "w-full", "h-auto", "rounded-tl-lg", "rounded-bl-lg"])} />{" "}
+            </div>
+            <div className={clsx(["grow", "pt-7", "pl-17", "pr-17"])}>
+              <div className={clsx(["flex", "gap-x-7", "pl-3", "pr-3", styles.tabSignUpSignIn])}>
+                <div className={clsx(["flex", "items-start", "pb-2", isTabSignIn === true && styles.active])}>
+                  <button className={clsx(["text-md", "font-bold", "text-gray-400"])} onClick={handleChangeTab(true)}>
+                    Sign In
+                  </button>
+                </div>
+                <div className={clsx(["flex", "items-start", "pb-2", isTabSignIn === false && styles.active])}>
+                  <button className={clsx(["text-md", "font-bold", "text-gray-400"])} onClick={handleChangeTab(false)}>
+                    Sign Up
+                  </button>
+                </div>
+              </div>
+              <div className={clsx(["mt-10"])}>{isTabSignIn ? <SignIn /> : <SignUp />}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </React.Fragment>
   );

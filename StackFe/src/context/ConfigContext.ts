@@ -1,6 +1,7 @@
-import { createContext } from "react";
+"use client";
+import React from "react";
 import { IConfigContext } from "@/types";
-const ConfigContext = createContext<IConfigContext>({
+const ConfigContext = React.createContext<IConfigContext>({
   locale: "en",
   onChangeLocale: () => {}
 });

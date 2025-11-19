@@ -313,20 +313,20 @@ const Menu: React.FC<Props> = ({ params }) => {
       </div>
       <div className={clsx(["fixed", "top-0", "left-0", "w-screen", "h-screen", stylesModalDialog.modal])} ref={modalRef}>
         <div className={clsx(["absolute", "top-0", "left-0", "w-screen", "h-screen", "bg-gray-950", "opacity-50"])} onClick={handleOpenModal(false)}></div>
-        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "max-lg:justify-start", "ml-auto", "mr-auto", "max-md:ml-5", "max-md:mr-5", "top-[50%]", stylesModalDialog.dialog, styles.menuDialog])} ref={dialogRef}>
-          <div className={clsx(["w-[45%]", "max-lg:w-full", "max-lg:h-50", "relative"])}>
+        <div className={clsx(["relative", "bg-white", "rounded-lg", "flex", "max-lg:flex-col", "justify-between", "max-w-200", "max-lg:justify-start", "ml-auto", "mr-auto", "max-md:ml-5", "max-md:mr-5", "top-[50%]", stylesModalDialog.dialog, styles.menuDialog])} ref={dialogRef}>
+          <div className={clsx(["grow", "max-lg:w-full", "max-lg:h-50", "relative"])}>
             <Image src="/Pizzaminsea.jpg" alt="Dominos" width={832} height={1440} className={clsx(["object-cover", "rounded-tl-lg", "lg:rounded-bl-lg", "max-lg:rounded-tr-lg", "w-full", "h-full"])} />
             <div className={clsx(["absolute", "lg:hidden", "top-0", "right-0", "bg-orange-700", "text-white", "rounded-tr-lg", "flex", "justify-center", "items-center", "w-10", "h-10"])}>
               <CloseOutlined onClick={handleOpenModal(false)} />
             </div>
           </div>
-          <div className={clsx(["w-[65%]", "max-lg:w-full", "relative", "max-lg:grow"])}>
+          <div className={clsx(["w-116", "max-lg:w-full", "relative"])}>
             <div className={clsx(["absolute", "max-lg:hidden", "top-0", "right-0", "bg-orange-700", "text-white", "rounded-tr-lg", "flex", "justify-center", "items-center", "w-10", "h-10"])}>
               <CloseOutlined onClick={handleOpenModal(false)} />
             </div>
             <div className={clsx(["pt-2", "pl-8", "pr-10"])}>
               <div className={clsx("overflow-x-hidden", "overflow-y-scroll", "h-150", "max-lg:h-105")}>
-                <h3 className={clsx(["font-bold", "text-2xl", "text-cyan-700"])}>Pizza Siêu Topping Hải Sản Nhiệt Đới Xốt Tiêu - Super Topping Pizzamin Sea</h3>
+                <h3 className={clsx(["font-bold", "text-2xl", "text-cyan-700"], "w-100")}>Pizza Siêu Topping Hải Sản Nhiệt Đới Xốt Tiêu - Super Topping Pizzamin Sea</h3>
                 <div className={clsx(["mt-6", "text-gray-500", "font-bold", "text-sm"])}>Extra protein toppings by 50%: Shrimp, Squid; Extra Mozzarella Cheese, Cheddar Cheese, Pineapple, Onion, Mayonnaise, Black Pepper Sauce</div>
                 <div className={clsx(["mt-10", "mb-10", "border-t-2", "border-gray-400", "w-17.5"])}></div>
                 <div>

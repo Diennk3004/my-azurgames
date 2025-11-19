@@ -1,7 +1,7 @@
 // third-party
 import { accountReducer, loadingReducer } from "@/slices";
 import { configureStore } from "@reduxjs/toolkit";
-import { useDispatch, useSelector } from "react-redux";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 // project imports
 
 // ==============================|| REDUX - MAIN STORE ||============================== //
@@ -14,6 +14,6 @@ const store = configureStore({
 });
 type RootState = ReturnType<typeof store.getState>;
 type AppDispatch = typeof store.dispatch;
-const useAppDispatch = useDispatch.withTypes<AppDispatch>();
-const useAppSelector = useSelector.withTypes<RootState>();
+const useAppDispatch = () => useDispatch<AppDispatch>();
+const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export { store, useAppDispatch, useAppSelector };

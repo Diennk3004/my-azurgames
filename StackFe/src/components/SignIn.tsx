@@ -5,6 +5,7 @@ import { useAppDispatch } from "@/stores";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { UserProps } from "@/types";
 import { loginAction } from "@/slices";
+import { getExpired } from "@/utils";
 type FormProps = {
   mobilephone: string;
   password: string;
@@ -27,10 +28,9 @@ const SignIn = () => {
     const { mobilephone, password } = dataFrm;
     signIn({ variables: { email_phone: mobilephone.toString().trim(), password: password.toString().trim() } })
       .then(async (response: any) => {
-        console.log("response = ", response);
         if (response && response.data && response.data.login) {
           let user: UserProps = response.data.login;
-          localStorage.setItem("access_token", user.token);
+          document.cookie = `access_token=${user.token}; expires=${getExpired(30)}; path=/;`;
           setTimeout(() => {
             dispatch(loginAction(user));
           }, 2000);

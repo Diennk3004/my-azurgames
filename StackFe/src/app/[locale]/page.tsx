@@ -1,6 +1,5 @@
 import { Footer } from "@/components";
 import styles from "@/scss/home.module.scss";
-import { Colors } from "@/utils";
 import { SearchOutlined } from "@ant-design/icons";
 import clsx from "clsx";
 import Image from "next/image";
@@ -46,7 +45,7 @@ const Home = () => {
                   <Image src="/musttry.jpg" alt="Dominos" width={2000} height={1334} className={clsx(["rounded-tl-md", "rounded-tr-md"])} />
                 </Link>
                 <h3 className={clsx(["text-center", "mt-3", "font-bold"])}>
-                  <Link href="/" style={{ color: Colors.blue }}>
+                  <Link href="/" className={clsx(["text-sky-600"])}>
                     Ocean Mania
                   </Link>
                 </h3>
@@ -56,7 +55,7 @@ const Home = () => {
           </div>
         </div>
         <div className={clsx(["flex", "justify-center", "mt-8"])}>
-          <Link href="/" style={{ backgroundColor: Colors.blue }} className={clsx(["pt-3", "pb-3", "pl-5", "pr-5", "text-white", "rounded-md", "font-bold"])}>
+          <Link href="/" className={clsx(["pt-3", "pb-3", "pl-5", "pr-5", "text-white", "bg-sky-600", "rounded-md", "font-bold"])}>
             See More
           </Link>
         </div>

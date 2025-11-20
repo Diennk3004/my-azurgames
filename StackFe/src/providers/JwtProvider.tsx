@@ -6,6 +6,7 @@ import { loginAction, logoutAction } from "@/slices";
 import { useAppDispatch, useAppSelector } from "@/stores";
 import { useMutation } from "@apollo/client";
 import { UserProps } from "@/types";
+import { getExpired } from "@/utils";
 const JwtProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.account.user);
@@ -14,9 +15,9 @@ const JwtProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [checkValidTokenUser] = useMutation(CHECK_VALID_TOKEN);
   React.useEffect(() => {
     const init = async () => {
-      const accessToken = localStorage.getItem("access_token");
-      if (accessToken) {
-        checkValidTokenUser({ variables: { token: accessToken } })
+      const access_token = localStorage.getItem("access_token");
+      if (access_token) {
+        checkValidTokenUser({ variables: { token: access_token } })
           .then(async (response: any) => {
             if (response && response.data && response.data.checkValidToken) {
               const item = response.data.checkValidToken;
@@ -26,16 +27,16 @@ const JwtProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
                 dispatch(loginAction(user));
               }
             } else {
-              localStorage.removeItem("access_token");
+              document.cookie = `access_token=token; expires=${getExpired(-100)}; path=/;`;
               dispatch(logoutAction());
             }
           })
           .catch(async (err: any) => {
-            localStorage.removeItem("access_token");
+            document.cookie = `access_token=token; expires=${getExpired(-100)}; path=/;`;
             dispatch(logoutAction());
           });
       } else {
-        localStorage.removeItem("access_token");
+        document.cookie = `access_token=token; expires=${getExpired(-100)}; path=/;`;
         dispatch(logoutAction());
       }
     };

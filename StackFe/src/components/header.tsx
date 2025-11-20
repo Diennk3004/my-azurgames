@@ -1,6 +1,6 @@
 "use client";
 import { useConfig } from "@/hooks";
-import { Link, usePathname, useRouter } from "@/i18n/navigation";
+import { Link, usePathname, useRouter } from "@/utils/navigation";
 import styles from "@/scss/header.module.scss";
 import stylesModalDialog from "@/scss/modal-dialog.module.scss";
 import { CarOutlined, CloseOutlined, MenuOutlined, ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
@@ -42,9 +42,9 @@ const Header = () => {
       menuMobileRef.current.style.top = `${headerHeight}px`;
       menuMobileRef.current.style.height = `${menuMobileHeight}px`;
     }
-  }, [window.innerHeight]);
+  }, []);
   React.useEffect(() => {
-    window.onscroll = function () {
+    const onScroll = () => {
       if (headerRef && headerRef.current) {
         const headerHeight = headerRef.current.clientHeight;
         const scrollTop: number = window.scrollY;
@@ -62,7 +62,12 @@ const Header = () => {
         }
       }
     };
+    window.addEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
+
   const handleLanguageChange = (locale: string) => () => {
     onChangeLocale(locale);
     router.replace(pathname, { locale });
@@ -97,7 +102,7 @@ const Header = () => {
         </Link>
         <ul className={clsx(["list-none", "flex", "row", "gap-x-10", styles.menu])}>
           <li className={styles.li}>
-            <Link href="/" className={clsx(["no-underline", "uppercase", "font-bold", "text-white"])}>
+            <Link href={{ pathname: "/e-voucher-code" }} className={clsx(["no-underline", "uppercase", "font-bold", "text-white"])}>
               {t("e_voucher_code")}
             </Link>
           </li>

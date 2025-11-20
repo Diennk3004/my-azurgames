@@ -1,10 +1,10 @@
 "use client";
 import { GET_FOOD, GET_MENU_FOOD, GET_MENU_TAG } from "@/graphql-client";
 import { useConfig } from "@/hooks";
-import { Link } from "@/i18n/navigation";
+import { Link } from "@/utils/navigation";
 import styles from "@/scss/menu.module.scss";
 import stylesModalDialog from "@/scss/modal-dialog.module.scss";
-import { Colors, formatCurrency, getUriImage } from "@/utils";
+import { formatCurrency, getUriImage } from "@/utils";
 import { CloseOutlined, MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import { useLazyQuery } from "@apollo/client";
 import clsx from "clsx";
@@ -188,7 +188,7 @@ const Menu: React.FC<Props> = ({ params }) => {
                           <Image src={getUriImage(item.featured_image)} alt="Dominos" width={2000} height={1334} className={clsx(["w-full", "h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
                         </button>
                         <h3 className={clsx(["text-center", "mt-3", "pl-2", "pr-2", "font-bold"])}>
-                          <button style={{ color: Colors.blue }} onClick={handleOpenModal(true)}>
+                          <button className={clsx(["text-sky-600"])} onClick={handleOpenModal(true)}>
                             {locale === "en" ? item.food_name_en : item.food_name_vi}
                           </button>
                         </h3>
@@ -212,7 +212,7 @@ const Menu: React.FC<Props> = ({ params }) => {
                           <Image src={`/${item.img}`} alt="Dominos" width={2000} height={1334} className={clsx(["w-full", "h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
                         </button>
                         <h3 className={clsx(["text-center", "mt-3", "font-bold"])}>
-                          <button style={{ color: Colors.blue }} onClick={handleOpenModal(true)}>
+                          <button className={clsx(["text-sky-600"])} onClick={handleOpenModal(true)}>
                             Ocean Mania
                           </button>
                         </h3>

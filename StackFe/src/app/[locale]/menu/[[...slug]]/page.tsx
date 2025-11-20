@@ -11,10 +11,6 @@ import clsx from "clsx";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 import React from "react";
-type ICake = {
-  title: string;
-  img: string;
-};
 type ICart = {
   title: string;
   img: string;
@@ -66,27 +62,9 @@ const Menu: React.FC<Props> = ({ params }) => {
   const [tagSlug, setTagSlug] = React.useState<string>("");
   const [foodData, setFoodData] = React.useState<IFood[]>([]);
   const [isOpenModal, setOpenModal] = React.useState<boolean>(false);
-  const [remainedBarHeight, setRemainedBarHeight] = React.useState<number>(0);
   const [getMenuList] = useLazyQuery(GET_MENU_FOOD, { fetchPolicy: "network-only" });
   const [getTagList] = useLazyQuery(GET_MENU_TAG, { fetchPolicy: "network-only" });
   const [getFood] = useLazyQuery(GET_FOOD, { fetchPolicy: "network-only" });
-  React.useEffect(() => {
-    if (addressBarRef && menuBarRef && addressBarRef.current && menuBarRef.current) {
-      const addressBarHeight: number = addressBarRef.current.clientHeight;
-      const menuBarHeight: number = menuBarRef.current.clientHeight;
-      let headerHeight: string | null = "";
-      if (localStorage.getItem("headerHeight")) {
-        headerHeight = localStorage.getItem("headerHeight");
-        if (headerHeight) {
-          console.log("headerHeight = ", headerHeight);
-          console.log("addressBarHeight = ", addressBarHeight);
-          console.log("menuBarHeight = ", menuBarHeight);
-          const blockHeight: number = window.innerHeight - (parseFloat(headerHeight) + addressBarHeight + menuBarHeight);
-          setRemainedBarHeight(blockHeight);
-        }
-      }
-    }
-  }, [window.innerHeight]);
   React.useEffect(() => {
     const getMenu = () => {
       getMenuList()
@@ -182,7 +160,7 @@ const Menu: React.FC<Props> = ({ params }) => {
               </ul>
             )}
           </div>
-          <div className={clsx(["overflow-x-hidden", "overflow-y-scroll", "pl-5", "pr-5"])} style={{ height: `${remainedBarHeight}px` }}>
+          <div className={clsx(["overflow-x-hidden", "overflow-y-scroll", "pl-5", "pr-5", styles.remainedBar])}>
             <div className={clsx([styles.foodList, "flex", "justify-center", "mt-5"])}>
               {tagList.length > 0 && (
                 <ul className={clsx([styles.foodNavbar, "w-[75%]", "max-lg:w-full", "flex", "justify-start", "gap-y-3", "gap-x-3", "flex-wrap"])}>
@@ -254,7 +232,7 @@ const Menu: React.FC<Props> = ({ params }) => {
                 <div className={clsx(["font-bold", "text-xl"])}>Your Order</div>
                 <div className={clsx(["font-bold", "text-xl"])}>1 Dish</div>
               </div>
-              <div className={clsx(["flex", "flex-col", "mt-10", "pb-5", "gap-y-10", "overflow-y-scroll", "overflow-x-hidden"])} style={{ height: `${remainedBarHeight}px` }}>
+              <div className={clsx(["flex", "flex-col", "mt-10", "pb-5", "gap-y-10", "overflow-y-scroll", "overflow-x-hidden", styles.remainedBar])}>
                 {cart.map((cartItem: ICart, idx: number) => {
                   return (
                     <div key={`cart-item-${idx}`} className={clsx(["grid", "gap-y-3", styles.cartGrid])}>

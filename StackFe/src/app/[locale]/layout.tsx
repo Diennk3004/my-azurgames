@@ -19,7 +19,7 @@ const RootLayout: React.FC<React.PropsWithChildren<Props>> = async ({ children, 
   setRequestLocale(locale);
   const messages = await getMessages();
   return (
-    <html className={`${genralSans.variable} ${kontrap.variable}`}>
+    <html lang={locale} className={`${genralSans.variable} ${kontrap.variable}`}>
       <body>
         <ClientProvider locale={locale} messages={messages}>
           <div className={clsx([stylesContainer.container, "ml-auto", "mr-auto"])}>

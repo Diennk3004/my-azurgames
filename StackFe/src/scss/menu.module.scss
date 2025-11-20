@@ -17,6 +17,9 @@ $space: 6;
         }
       }
     }
+    .remainedBar {
+      height: calc(100vh - 13rem);
+    }
   }
   .colRight {
     width: calc(100vw / $space);
@@ -25,6 +28,9 @@ $space: 6;
     }
     .cartGrid {
       grid-template-columns: 2rem 2rem 11.875rem auto;
+    }
+    .remainedBar {
+      height: calc(100vh - 13rem);
     }
   }
 }

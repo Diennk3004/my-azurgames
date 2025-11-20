@@ -41,7 +41,6 @@ const Header = () => {
       const menuMobileHeight: number = window.innerHeight - headerHeight;
       menuMobileRef.current.style.top = `${headerHeight}px`;
       menuMobileRef.current.style.height = `${menuMobileHeight}px`;
-      localStorage.setItem("headerHeight", headerHeight.toString());
     }
   }, [window.innerHeight]);
   React.useEffect(() => {

@@ -1,7 +1,6 @@
 import createMiddleware from "next-intl/middleware";
 import { defineRouting } from "next-intl/routing";
 import { NextRequest, NextResponse } from "next/server";
-import { redirect } from "./utils";
 const protectedRoutes = ["/e-voucher-code"];
 const publicRoutes = ["/menu/pizza/seafood"];
 export default function middleware(request: NextRequest) {

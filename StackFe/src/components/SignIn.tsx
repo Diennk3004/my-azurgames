@@ -30,6 +30,7 @@ const SignIn = () => {
       .then(async (response: any) => {
         if (response && response.data && response.data.login) {
           let user: UserProps = response.data.login;
+          console.log("user = ", user);
           document.cookie = `access_token=${user.token}; expires=${getExpired(30)}; path=/;`;
           setTimeout(() => {
             dispatch(loginAction(user));

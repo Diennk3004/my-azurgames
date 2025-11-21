@@ -6,7 +6,7 @@ import { loginAction, logoutAction } from "@/slices";
 import { useAppDispatch, useAppSelector } from "@/stores";
 import { useMutation } from "@apollo/client";
 import { UserProps } from "@/types";
-import { getExpired } from "@/utils";
+import { getCookie, getExpired } from "@/utils";
 const JwtProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.account.user);
@@ -15,7 +15,7 @@ const JwtProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const [checkValidTokenUser] = useMutation(CHECK_VALID_TOKEN);
   React.useEffect(() => {
     const init = async () => {
-      const access_token = localStorage.getItem("access_token");
+      const access_token: string = getCookie("access_token");
       if (access_token) {
         checkValidTokenUser({ variables: { token: access_token } })
           .then(async (response: any) => {

@@ -201,28 +201,6 @@ const Menu: React.FC<Props> = ({ params }) => {
                 </div>
               )}
             </div>
-            {/* <div className={clsx([styles.cakeBlock, "lg:w-full", "flex", "flex-col", "items-center", "mt-10", "mx-auto"])}>
-              <h3 className={clsx(["uppercase", "text-2xl", "font-bold"])}>Seafood Cravers</h3>
-              {cakeList.length > 0 && (
-                <div className={clsx(["grid", "lg:grid-cols-4", "sm:grid-cols-2", "gap-x-8", "gap-y-5", "mt-8", styles.cakeList])}>
-                  {cakeList.map((item: ICake, idx: number) => {
-                    return (
-                      <div key={`cake-item-${idx}`} className={clsx(["bg-white", "rounded-md", "border", "border-gray-200", "pb-4"])}>
-                        <button onClick={handleOpenModal(true)}>
-                          <Image src={`/${item.img}`} alt="Dominos" width={2000} height={1334} className={clsx(["w-full", "h-50", "rounded-tl-md", "rounded-tr-md", "object-cover"])} />
-                        </button>
-                        <h3 className={clsx(["text-center", "mt-3", "font-bold"])}>
-                          <button className={clsx(["text-sky-600"])} onClick={handleOpenModal(true)}>
-                            Ocean Mania
-                          </button>
-                        </h3>
-                        <div className={clsx(["text-center", "mt-3", "font-bold"])}>9 inch - 205,000 đ</div>
-                      </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div> */}
           </div>
         </div>
         <div className={clsx(["pl-4", "pr-4", "pt-4", "pb-4", "relative", "border-l", "border-gray-200", styles.colRight])}>

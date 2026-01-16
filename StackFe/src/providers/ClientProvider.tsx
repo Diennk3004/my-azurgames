@@ -1,5 +1,5 @@
 "use client";
-import { store } from "@/stores";
+import { store } from "@/store";
 import { ApolloClient, ApolloProvider, createHttpLink, InMemoryCache } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { NextIntlClientProvider } from "next-intl";

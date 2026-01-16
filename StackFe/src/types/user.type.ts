@@ -1,4 +1,4 @@
-type UserProps = {
+type IUser = {
   _id: string;
   email: string;
   fullname: string;
@@ -6,4 +6,4 @@ type UserProps = {
   locale: string;
   token: string;
 };
-export type { UserProps };
+export type { IUser };

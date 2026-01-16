@@ -1,8 +1,8 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { UserProps } from "@/types";
+import { IUser } from "@/types";
 interface IProps {
   isLoggedIn: boolean;
-  user: UserProps | null;
+  user: IUser | null;
 }
 const initialState: IProps = {
   isLoggedIn: false,
@@ -12,7 +12,7 @@ const slice = createSlice({
   name: "account-slice",
   initialState,
   reducers: {
-    loginAction: (state, action: PayloadAction<UserProps>) => {
+    loginAction: (state, action: PayloadAction<IUser>) => {
       state.isLoggedIn = true;
       state.user = action.payload;
     },
@@ -20,7 +20,7 @@ const slice = createSlice({
       state.isLoggedIn = false;
       state.user = null;
     },
-    updateInfoAction: (state, action: PayloadAction<UserProps>) => {
+    updateInfoAction: (state, action: PayloadAction<IUser>) => {
       state.user = action.payload;
     }
   }
